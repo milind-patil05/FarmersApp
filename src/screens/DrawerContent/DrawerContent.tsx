@@ -65,12 +65,12 @@ function DrawerContent() {
         style={{flexDirection: 'row', marginTop: 16}}
         onPress={() => {
           navigation.dispatch(DrawerActions.closeDrawer());
-           navigation.dispatch(
-                  CommonActions.reset({
-                    index: 1,
-                    routes: [{name: 'Login'}],
-                  }),
-                );
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{ name: 'Login' }],
+            }),
+          );
         }}>
         <FontAwesome5Icon name="sign-out-alt" size={24} color={'#000000'} />
         <Text
