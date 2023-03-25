@@ -7,8 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-// import auth from '@react-native-firebase/auth';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import auth from '@react-native-firebase/auth';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 
 const Login = () => {
@@ -27,27 +27,6 @@ const Login = () => {
   return (
     <SafeAreaView>
       <View style={{flex: 1, flexDirection: 'column'}}>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            width: Dimensions.get('screen').width,
-            height: 50,
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            backgroundColor: '#EEEEEE',
-            borderWidth: 0.5,
-            borderColor: '#AFB1B6',
-            flexDirection: 'row',
-          }}>
-          {/* <Ionicons
-            name="chevron-back-sharp"
-            size={28}
-            style={{alignSelf: 'center'}}
-          /> */}
-          <Text style={{fontSize: 20, fontWeight: '600', marginLeft: 10}}>
-            Login
-          </Text>
-        </View>
         <View style={{flex: 1, padding: 16, flexDirection: 'column'}}>
           <View
             style={{
@@ -108,8 +87,9 @@ const Login = () => {
               onPress={() => {
                 // signInWithPhoneNumber('+1 650-555-3434'); //(userName);
                 navigation.dispatch(
-                  CommonActions.navigate({
-                    name: 'Home',
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [{name: 'Home'}],
                   }),
                 );
               }}>
