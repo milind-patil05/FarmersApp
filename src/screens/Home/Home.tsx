@@ -9,6 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Home = () => {
   const [userName, setUserName] = React.useState('');
@@ -35,8 +36,8 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <View style={{flex: 1, flexDirection: 'column'}}>
-        <View
+      <View style={{flexDirection: 'column'}}>
+        {/* <View
           style={{
             paddingHorizontal: 16,
             width: Dimensions.get('screen').width,
@@ -48,15 +49,10 @@ const Home = () => {
             borderColor: '#AFB1B6',
             flexDirection: 'row',
           }}>
-          {/* <Ionicons
-            name="chevron-back-sharp"
-            size={28}
-            style={{alignSelf: 'center'}}
-          /> */}
           <Text style={{fontSize: 20, fontWeight: '600', marginLeft: 10}}>
             Hi Username, Welcome !
           </Text>
-        </View>
+        </View> */}
         <View
           style={{
             height: Dimensions.get('screen').height - 60,
@@ -109,16 +105,18 @@ const Home = () => {
             {/* <TouchableOpacity style={{ backgroundColor:'#000000' , height: 50, marginTop: 24, borderWidth: 1, width:Dimensions.get('screen').width-32, alignItems:'center', justifyContent:'center'}}>
                     <Text style={{ fontSize: 20, fontWeight: '600', alignSelf:'center',color:'#FFFFFF' }}>Login</Text>
                 </TouchableOpacity> */}
-            <View>
+            <View style={{flex:1, flexWrap:'wrap', marginTop:24, paddingBottom:84}}>
               <FlatList
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
                 style={{
                   width: Dimensions.get('screen').width - 32,
-                  marginTop: 24,
                 }}
                 data={menus}
                 keyExtractor={item => item.key}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                }}
                 renderItem={({item}) => (
                   <View style={{flexDirection: 'column', margin: 12, flex: 1}}>
                     <View
@@ -126,11 +124,17 @@ const Home = () => {
                         justifyContent: 'flex-start',
                         backgroundColor: '#D9D9D9',
                         height: (Dimensions.get('screen').width - 40) * 0.5,
-                        width: (Dimensions.get('screen').width - 44) * 0.5,
-                        borderRadius: 4,
+                        width: (Dimensions.get('screen').width - 60) * 0.5,
+                        borderRadius: 8,
                         flexWrap: 'wrap',
                       }}></View>
-                    <Text style={{marginTop: 8, width: 80}}>{item.title}</Text>
+                    <Text
+                      style={{
+                        marginTop: 8,
+                        width: (Dimensions.get('screen').width - 60) * 0.5,
+                      }}>
+                      {item.title}
+                    </Text>
                   </View>
                 )}
               />
