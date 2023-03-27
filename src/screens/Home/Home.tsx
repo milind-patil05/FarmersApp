@@ -54,7 +54,7 @@ const Home = () => {
 
           <View>
             <FlatList
-              style={{ width: Dimensions.get('window').width - 32 }}
+              style={{width: Dimensions.get('window').width - 32}}
               horizontal={true}
               data={crops}
               keyExtractor={item => item.id}
@@ -71,14 +71,16 @@ const Home = () => {
                       flexWrap: 'wrap',
                     }}>
                     <Image
-                      source={{ uri: item.image }}
+                      source={{uri: item.image}}
                       style={{
                         height: 80,
                         width: 80
                       }}
                     />
                   </View>
-                  <Text style={{ marginTop: 8, width: 80 }}>{item.crop_name}</Text>
+                  <Text style={{marginTop: 8, width: 80}}>
+                    {item.crop_name}
+                  </Text>
                 </View>
               )}
             />
