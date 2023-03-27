@@ -7,10 +7,12 @@ import {
   Dimensions,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
-import {useNavigation, CommonActions} from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import DB_COLLECTION from '../../utils/constants';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -66,7 +68,15 @@ const Login = () => {
               borderRadius: 8,
               flexWrap: 'wrap',
               backgroundColor: '#D9D9D9',
-            }}></View>
+            }}>
+            <Image
+              source={{ uri: DB_COLLECTION.LOGIN }}
+              style={{
+                height: 200,
+                width: Dimensions.get('screen').width - 32
+              }}
+            />
+          </View>
           <View
             style={{
               width: Dimensions.get('screen').width,
