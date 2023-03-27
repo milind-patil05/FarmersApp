@@ -12,6 +12,7 @@ import {Profile} from './src/screens/Profile';
 import {Settings} from './src/screens/Settings';
 import {Login} from './src/screens/Login';
 import {Verify} from './src/screens/Verify';
+import {Comment} from './src/screens/Comment';
 import {DrawerContent} from './src/screens/DrawerContent';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
@@ -131,6 +132,11 @@ const routes: any[] = [
   {
     name: 'Verify',
     component: Verify,
+    headerShown: true,
+  },
+  {
+    name: 'Comment',
+    component: Comment,
     headerShown: true,
   },
 ];
