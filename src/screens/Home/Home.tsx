@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ScrollView } from 'react-native-gesture-handler';
 import firestore from "@react-native-firebase/firestore";
 
-import DB_COLLECTION from '../../utils/constants'
+import DB_COLLECTION from '../../utils/constants';
 
 const Home = () => {
   const [userName, setUserName] = React.useState('');

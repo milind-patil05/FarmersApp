@@ -45,17 +45,17 @@ const Login = () => {
 
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber: any) {
-    navigation.navigate('Verify');
+    // navigation.navigate('Verify');
     console.log('_______ ', phoneNumber);
     const reg = /^\+?([0-9]{2})\)?[789]\d{9}$/;
-    // if (reg.test(phoneNumber) === false) {
-    //   setInvalidPhoneNumber(true);
-    //   console.log('false');
-    // } else {
-    //   const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    //   setConfirm(confirmation);
-    //   navigation.navigate('Verify');
-    // }
+    if (reg.test(phoneNumber) === false) {
+      setInvalidPhoneNumber(true);
+      console.log('false');
+    } else {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirm(confirmation);
+      navigation.navigate('Verify');
+    }
   }
 
   return (

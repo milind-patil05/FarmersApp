@@ -163,6 +163,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
     implementation platform('com.google.firebase:firebase-auth')
+    implementation project(':react-native-audio-recorder-player')
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {
