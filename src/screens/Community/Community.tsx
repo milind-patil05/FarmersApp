@@ -5,73 +5,37 @@ import AntDesignIcons from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation, CommonActions} from '@react-navigation/native';
+import { fetchPosts } from '../../redux/slices/postsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { fetchUser } from '../../redux/slices/userSlice';
+import { fetchComments } from '../../redux/slices/commentsSlice';
 
 function Community() {
+  
+  useEffect(() => {
+    dispatch(fetchUser());
+    dispatch(fetchPosts());
+    dispatch(fetchComments());
+  },[])
+
   const navigation = useNavigation();
-  const [menus, setMenus] = React.useState([
-    {
-      key: '1',
-      title: 'Crop Details',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      description:
-        'svbjhdfgjhwfkjchenkjgehkjgchekjcgehkghekghkhfekjghefjkvbjkhenhfhjkxefjkgcnefckhbfsekhbvkhcfsnhkkfjghjkehnjkgcefhnughefkgieuhlgkuehlkcgmhkehgcislkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '2',
-      title: 'Weather Updates',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '3',
-      title: 'Diseage management',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '4',
-      title: 'Govenrment schemes',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '5',
-      title: 'Farmers Corner',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-  ]);
+  const  dispatch = useDispatch();
+  const postsData = useSelector((state: RootState) => state.posts.postsData);
+  const userData = useSelector((state: RootState) => state.user.userData);
+  const commentsData = useSelector((state: RootState) => state.comments.commentsData);
+
+  const likeCount = (postId: number) => {
+  return postsData.filter(post => post && post.id === postId && post.like) };
+  const unlikeCount = (postId: number) => { return postsData.filter(post => post && post.id === postId && post.unlike) };
+  const commentCount = (postId: number) => {
+    return commentsData.filter(comment => comment && comment.post_id === postId) };
+  const getUser = (userId: number) => {
+     return userData.filter(user => user && user.id === userId)[0];
+  }
 
   const renderItem = ({item}: any) => (
+    
     <View style={{flexDirection: 'column', marginRight: 16, flex: 1}}>
       <View
         style={{
@@ -97,18 +61,20 @@ function Community() {
               justifyContent: 'flex-start',
               flex: 1,
             }}>
-            <Image
-              source={item?.src}
+             
+           { getUser(item?.user_id)?.profile && ( <Image
+              source={{uri: getUser(item?.user_id)?.profile}}
               style={{
                 width: 28,
                 height: 28,
                 resizeMode: 'contain',
                 marginRight: 16,
                 alignSelf: 'center',
-              }}></Image>
+              }} /> )}
+
             <View style={{flexDirection: 'column'}}>
               <Text style={{fontWeight: '600', fontSize: 16, color: '#000000'}}>
-                {item?.name}
+                {getUser(item?.user_id)?.firstName + ' ' + getUser(item?.user_id)?.lastName}
               </Text>
               <Text
                 style={{
@@ -117,7 +83,7 @@ function Community() {
                   fontSize: 12,
                   color: '#666666',
                 }}>
-                {item?.address}
+                {getUser(item?.user_id)?.city}
               </Text>
             </View>
           </View>
@@ -135,8 +101,17 @@ function Community() {
             fontSize: 12,
             color: '#222222',
           }}>
-          {item?.description}
+          {item?.message}
         </Text>
+        {item?.image && (
+        <Image 
+        style={{
+          marginTop: 20,
+          flexWrap: 'wrap',
+          width: Dimensions.get('screen').width - 36,
+          height: 100
+        }} source={{uri: item.image}} /> )}
+
         <Text
           style={{
             fontWeight: '400',
@@ -146,7 +121,7 @@ function Community() {
             fontSize: 12,
             color: '#222222',
           }}>
-          {`${item?.commentsCount} Comments`}
+          {`${commentCount(item?.id)?.length} Comments`}
         </Text>
         <View
           style={{
@@ -183,7 +158,7 @@ function Community() {
                 marginLeft: 5,
                 color: '#000000',
               }}>
-              {`${item?.likeCount}`}
+              {likeCount(item?.id)?.length}
             </Text>
           </View>
 
@@ -207,7 +182,7 @@ function Community() {
                 marginLeft: 5,
                 color: '#000000',
               }}>
-              {`${item?.dislikeCount}`}
+              {unlikeCount(item?.id)?.length}
             </Text>
           </View>
 
@@ -281,8 +256,8 @@ function Community() {
       <View>
         <FlatList
           style={{width: Dimensions.get('screen').width}}
-          data={menus}
-          keyExtractor={item => item.key}
+          data={postsData}
+          keyExtractor={item => item?.id}
           renderItem={renderItem}
         />
       </View>

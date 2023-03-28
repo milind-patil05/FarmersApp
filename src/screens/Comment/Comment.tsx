@@ -24,78 +24,32 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { fetchUser } from '../../redux/slices/userSlice';
+import { fetchComments } from '../../redux/slices/commentsSlice';
+import auth from '@react-native-firebase/auth';
 function Comment() {
   const width = Dimensions.get('screen').width;
   const height = Dimensions.get('screen').height;
   const [isVisible, setIsVisible] = useState(false);
-  const [menus, setMenus] = React.useState([
-    {
-      key: '1',
-      title: 'Crop Details',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      isDataFromOtherUser: true,
-      description:
-        'svbjhdfgjhwfkjchenkjgehkjgchekjcgehkghekghkhfekjghefjkvbjkhenhfhjkxefjkgcnefckhbfsekhbvkhcfsnhkkfjghjkehnjkgcefhnughefkgieuhlgkuehlkcgmhkehgcislkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '2',
-      title: 'Weather Updates',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      isDataFromOtherUser: true,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '3',
-      title: 'Diseage management',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      isDataFromOtherUser: true,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '4',
-      title: 'Govenrment schemes',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      isDataFromOtherUser: true,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-    {
-      key: '5',
-      title: 'Farmers Corner',
-      src: require('../../assets/user_placeholder.png'),
-      name: 'firstname lastname',
-      address: 'mumbai, maharshtra',
-      likeCount: 5,
-      dislikeCount: 1,
-      commentsCount: 2,
-      isDataFromOtherUser: false,
-      description:
-        'svbjhdfgjhslkjsncgksfgjkhgjkvhkgjshnjkvhdmgbsvhshbjrxghjbghjfbghjscbshbfhjcssfgfs,',
-    },
-  ]);
+  const  dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.user.userData);
+  const commentsData = useSelector((state: RootState) => state.comments.commentsData);
+  const getUser = (userId: number) => {
+       return userData.filter(user => user && user.id === userId)[0];
+    }
+    const currentUser = auth().currentUser;
+    console.log(currentUser);
+
+    useEffect(() => {
+      dispatch(fetchUser());
+      dispatch(fetchComments());
+    },[])
+
+    const likeCount = (commentId: number) => {return commentsData.filter(comment => comment && comment.id === commentId && comment.like) };
+    const unlikeCount = (commentId: number) => { return commentsData.filter(comment => comment && comment.id === commentId && comment.unlike) };
+
   const [permissionGranted, setPermissionGranted] = useState(false);
   const navigation = useNavigation();
   const [recordSecs, setRecordSecs] = useState(0);
@@ -227,12 +181,12 @@ function Comment() {
     <View
       style={{
         flexDirection:
-          item?.isDataFromOtherUser === false ? 'row-reverse' : 'row',
+          item?.user_id === currentUser ? 'row-reverse' : 'row',
         flex: 1,
         marginTop: 16,
         paddingHorizontal: 16,
         justifyContent:
-          item?.isDataFromOtherUser === false ? 'flex-end' : 'flex-start',
+          item?.user_id === currentUser ? 'flex-end' : 'flex-start',
       }}>
       <View
         style={{
@@ -243,23 +197,32 @@ function Comment() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <FontAwesomeIcon
-          name="user"
-          size={22}
-          color={
-            item?.isDataFromOtherUser === false ? '#000000' : '#FFFFFF'
-          }></FontAwesomeIcon>
+          { getUser(item?.user_id)?.profile ? (<Image
+              source={{uri: getUser(item?.user_id)?.profile}}
+              style={{
+                width: 28,
+                height: 28,
+                resizeMode: 'contain',
+                alignSelf: 'center',
+              }} /> ) : (<FontAwesomeIcon
+                name="user"
+                size={22}
+                color={
+                  item?.user_id === currentUser ? '#000000' : '#FFFFFF'
+                }>
+                </FontAwesomeIcon>)}
+        
       </View>
       <View
         style={{
           backgroundColor: '#DDDDDD',
           width: width - 80,
-          marginLeft: item?.isDataFromOtherUser === false ? 0 : 4,
-          marginRight: item?.isDataFromOtherUser === false ? 4 : 4,
+          marginLeft: item?.user_id === currentUser ? 0 : 4,
+          marginRight: item?.user_id === currentUser ? 4 : 4,
           borderBottomRightRadius: 6,
           borderBottomLeftRadius: 6,
-          borderTopRightRadius: item?.isDataFromOtherUser === false ? 0 : 6,
-          borderTopLeftRadius: item?.isDataFromOtherUser === false ? 6 : 0,
+          borderTopRightRadius: item?.user_id === currentUser ? 0 : 6,
+          borderTopLeftRadius: item?.user_id === currentUser ? 6 : 0,
           padding: 5,
         }}>
         <View
@@ -271,7 +234,7 @@ function Comment() {
           <View style={{flexDirection: 'column', paddingLeft: 5}}>
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontWeight: '600', fontSize: 14, color: '#000000'}}>
-                {item?.name}
+                {getUser(item?.user_id)?.firstName + ' ' + getUser(item?.user_id)?.lastName}
               </Text>
               <View
                 style={{
@@ -295,7 +258,7 @@ function Comment() {
                 fontSize: 10,
                 color: '#666666',
               }}>
-              {item?.address}
+              {getUser(item?.user_id)?.city + ' ' + getUser(item?.user_id)?.state}
             </Text>
           </View>
           <MaterialCommunityIcons
@@ -304,9 +267,19 @@ function Comment() {
             color={'#444444'}></MaterialCommunityIcons>
         </View>
 
-        <Text style={{paddingHorizontal: 5, color: '#111111'}}>
-          scgnkljsdcghkehknhjkghsdfjkgnsdjkvbakjfbajkbvkjarbvkjwrbfkjbarjknbaerjkfnajkbfvkjasdbvjksdbvjksdnjkvnsdjkvnsdjkvnjksdnvkjsdnvnsdjkvnjksdnvkjnsdjkv
-        </Text>
+        { item?.comment && (<Text style={{paddingHorizontal: 5, color: '#111111'}}>
+          {item?.comment}
+        </Text> )}
+
+        {item.image && (
+        <Image 
+        style={{
+          marginTop: 20,
+          flexWrap: 'wrap',
+          width: width - 100,
+          height: 100
+        }} source={{uri: item.image}} /> )}
+
 
         <View style={{flex: 1, paddingTop: 15, justifyContent: 'flex-end'}}>
           <Text
@@ -317,7 +290,7 @@ function Comment() {
               fontSize: 11,
                color: '#444444',
             }}>
-            27 March
+            {/* { new Date(item?.createdDate) } */}
           </Text>
         </View>
       </View>
@@ -329,8 +302,8 @@ function Comment() {
       <View style={{marginBottom: 64}}>
         <FlatList
           style={{width: Dimensions.get('screen').width}}
-          data={menus}
-          keyExtractor={item => item.key}
+          data={commentsData}
+          keyExtractor={item => item.id}
           renderItem={renderItem}
         />
       </View>

@@ -16,6 +16,8 @@ import {Comment} from './src/screens/Comment';
 import {DrawerContent} from './src/screens/DrawerContent';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import { Provider } from "react-redux";
+import { store } from './src/redux/store';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -145,6 +147,7 @@ const LoginComponent = (props: any) => <Login {...props} />;
 
 function App() {
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
@@ -166,6 +169,7 @@ function App() {
           ))}
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
 
