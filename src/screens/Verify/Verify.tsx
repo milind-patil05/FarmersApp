@@ -13,7 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import OtpInputs from 'react-native-otp-inputs';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import DB_COLLECTION from '../../utils/constants';
 
 const Verify = () => {
@@ -49,20 +49,27 @@ const Verify = () => {
   }, []);
 
   async function confirmCode() {
-    console.log('$$ ', code);
-    try {
-      console.log(route?.params?.confirm);
-      let a = await route?.params?.confirm?.confirm(code);
-      console.log('&&&&& ', a);
-    } catch (error) {
-      // navigation.dispatch(
-      //   CommonActions.reset({
-      //     index: 1,
-      //     routes: [{name: 'Home'}],
-      //   }),
-      // );
-      console.log('Invalid code.');
-    }
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Home'}],
+      }),
+    );
+
+    // console.log('$$ ', code);
+    // try {
+    //   console.log(route?.params?.confirm);
+    //   let a = await route?.params?.confirm?.confirm(code);
+    //   console.log('&&&&& ', a);
+    // } catch (error) {
+    //   // navigation.dispatch(
+    //   //   CommonActions.reset({
+    //   //     index: 1,
+    //   //     routes: [{name: 'Home'}],
+    //   //   }),
+    //   // );
+    //   console.log('Invalid code.');
+    // }
   }
 
   return (
@@ -77,14 +84,14 @@ const Verify = () => {
               flexWrap: 'wrap',
               backgroundColor: '#D9D9D9',
             }}>
-              <Image
-              source={{ uri: DB_COLLECTION.LOGIN }}
+            <Image
+              source={{uri: DB_COLLECTION.LOGIN}}
               style={{
                 height: 200,
-                width: Dimensions.get('screen').width - 32
+                width: Dimensions.get('screen').width - 32,
               }}
             />
-            </View>
+          </View>
           <View
             style={{
               width: Dimensions.get('screen').width,

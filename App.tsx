@@ -13,6 +13,7 @@ import {Settings} from './src/screens/Settings';
 import {Login} from './src/screens/Login';
 import {Verify} from './src/screens/Verify';
 import {Comment} from './src/screens/Comment';
+import {PostScreen} from './src/screens/PostScreen';
 import {DrawerContent} from './src/screens/DrawerContent';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
@@ -20,6 +21,8 @@ import { Provider } from "react-redux";
 import { store } from './src/redux/store';
 import Toast from 'react-native-toast-message';
 import ToastComponent from './src/toast/ToastComponent';
+import { SelectOptions } from './src/screens/SelectOptions';
+import { TakePhoto } from './src/screens/TakePhoto';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -133,13 +136,28 @@ const routes: any[] = [
     headerShown: true,
   },
   {
-    name: 'Verify',
+    name: 'Verify OTP',
     component: Verify,
     headerShown: true,
   },
   {
     name: 'Comment',
     component: Comment,
+    headerShown: true,
+  },
+  {
+    name: 'Select Options',
+    component: SelectOptions,
+    headerShown: true,
+  },
+  {
+    name: 'Create New Post',
+    component: PostScreen,
+    headerShown: true,
+  },
+  {
+    name: 'Take Photo',
+    component: TakePhoto,
     headerShown: true,
   },
 ];

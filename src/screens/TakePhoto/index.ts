@@ -1,0 +1,1 @@
+export {TakePhoto} from './TakePhoto';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   Text,
@@ -15,7 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import IoniconsIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -24,21 +24,25 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { fetchUser } from '../../redux/slices/userSlice';
-import { createComment, fetchComments, getDocId } from '../../redux/slices/commentsSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
+import {fetchUser} from '../../redux/slices/userSlice';
+import {
+  createComment,
+  fetchComments,
+  getDocId,
+} from '../../redux/slices/commentsSlice';
 import auth from '@react-native-firebase/auth';
-import { useRoute } from '@react-navigation/native';
-import { Keyboard } from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import {Keyboard} from 'react-native';
 import {
   ImageLibraryOptions,
   ImagePickerResponse,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import { utils } from '@react-native-firebase/app';
+import {utils} from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
-import firestore from "@react-native-firebase/firestore";
+import firestore from '@react-native-firebase/firestore';
 
 function Comment() {
   const width = Dimensions.get('screen').width;
@@ -48,22 +52,27 @@ function Comment() {
   const route = useRoute();
   const [galleryPhoto, setGalleryPhoto] = useState('');
   const userData = useSelector((state: RootState) => state.user.userData);
-  const commentsData = useSelector((state: RootState) => state.comments.commentsData);
+  const commentsData = useSelector(
+    (state: RootState) => state.comments.commentsData,
+  );
 
   const getUser = (userId: number) => {
     return userData?.filter(user => user && user.id === userId)[0];
-  }
+  };
   const currentUser = auth()?.currentUser;
-  console.log('current user',currentUser);
+  console.log('current user', currentUser);
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(fetchComments());
     // uploadData();
-  }, [])
+  }, []);
 
-      async function uploadData() {
-    return await firestore().collection("crop_practices").doc("wOr4iRRdJdZ1YZKxsZq9").set([])
-}
+  async function uploadData() {
+    return await firestore()
+      .collection('crop_practices')
+      .doc('wOr4iRRdJdZ1YZKxsZq9')
+      .set([]);
+  }
 
   const options: ImageLibraryOptions = {
     mediaType: 'photo',
@@ -80,12 +89,11 @@ function Comment() {
 
     // const pathToFile = `${utils.FilePath.PICTURES_DIRECTORY}/${galleryPhoto}`;
     const pathToFile = galleryPhoto;
-    // uploads file          
+    // uploads file
     await reference.putFile(galleryPhoto);
     const res = await reference.getDownloadURL();
-    console.log('image url',res);
+    console.log('image url', res);
   };
-
 
   const requestCameraPermission = async () => {
     try {
@@ -111,7 +119,6 @@ function Comment() {
       console.warn(err);
     }
   };
-
 
   // const likeCount = (commentId: number) => { return commentsData.filter(comment => comment && comment.id === commentId && comment.like) };
   // const unlikeCount = (commentId: number) => { return commentsData.filter(comment => comment && comment.id === commentId && comment.unlike) };
@@ -146,11 +153,11 @@ function Comment() {
 
             if (
               grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-              PermissionsAndroid.RESULTS.GRANTED &&
+                PermissionsAndroid.RESULTS.GRANTED &&
               grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-              PermissionsAndroid.RESULTS.GRANTED &&
+                PermissionsAndroid.RESULTS.GRANTED &&
               grants['android.permission.RECORD_AUDIO'] ===
-              PermissionsAndroid.RESULTS.GRANTED
+                PermissionsAndroid.RESULTS.GRANTED
             ) {
               setPermissionGranted(true);
               startAudiRecording();
@@ -173,23 +180,25 @@ function Comment() {
     const ids = commentsData.map(ele => ele.id);
 
     const commentReq = {
-      id: ids?.includes(Math.floor(Math.random() * 100000)) ? Math.floor(Math.random() * 100000) : Math.floor(Math.random() * 100000),
-      audio: "",
+      id: ids?.includes(Math.floor(Math.random() * 100000))
+        ? Math.floor(Math.random() * 100000)
+        : Math.floor(Math.random() * 100000),
+      audio: '',
       comment: comment,
       createdDate: new Date(),
-      image: "",
+      image: '',
       like: [],
       post_id: route?.params?.postId,
       status: true,
       unlike: [],
       updatedDate: new Date(),
-      user_id: "12345"
-    }
+      user_id: '12345',
+    };
     dispatch(createComment(commentReq));
     dispatch(fetchComments());
-    setComment("");
+    setComment('');
     Keyboard.dismiss();
-  }
+  };
 
   useEffect(() => {
     if (isVisible === true) {
@@ -262,11 +271,10 @@ function Comment() {
     audioRecorderPlayer.removePlayBackListener();
   };
 
-  const renderItem = ({ item }: any) => (
+  const renderItem = ({item}: any) => (
     <View
       style={{
-        flexDirection:
-          item?.user_id === currentUser ? 'row-reverse' : 'row',
+        flexDirection: item?.user_id === currentUser ? 'row-reverse' : 'row',
         flex: 1,
         marginTop: 16,
         paddingHorizontal: 16,
@@ -282,21 +290,24 @@ function Comment() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {getUser(item?.user_id)?.profile ? (<Image
-          source={{ uri: getUser(item?.user_id)?.profile }}
-          style={{
-            width: 28,
-            height: 28,
-            resizeMode: 'contain',
-            alignSelf: 'center',
-          }} />) : (<FontAwesomeIcon
+        {getUser(item?.user_id)?.profile ? (
+          <Image
+            source={{uri: getUser(item?.user_id)?.profile}}
+            style={{
+              width: 28,
+              height: 28,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+          />
+        ) : (
+          <FontAwesomeIcon
             name="user"
             size={22}
             color={
               item?.user_id === currentUser ? '#000000' : '#FFFFFF'
-            }>
-          </FontAwesomeIcon>)}
-
+            }></FontAwesomeIcon>
+        )}
       </View>
       <View
         style={{
@@ -316,10 +327,12 @@ function Comment() {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <View style={{ flexDirection: 'column', paddingLeft: 5 }}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontWeight: '600', fontSize: 14, color: '#000000' }}>
-                {getUser(item?.user_id)?.firstName + ' ' + getUser(item?.user_id)?.lastName}
+          <View style={{flexDirection: 'column', paddingLeft: 5}}>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{fontWeight: '600', fontSize: 14, color: '#000000'}}>
+                {getUser(item?.user_id)?.firstName +
+                  ' ' +
+                  getUser(item?.user_id)?.lastName}
               </Text>
               <View
                 style={{
@@ -331,7 +344,7 @@ function Comment() {
                   marginLeft: 8,
                 }}>
                 <Text
-                  style={{ fontWeight: '400', fontSize: 10, color: '#FFFFFF' }}>
+                  style={{fontWeight: '400', fontSize: 10, color: '#FFFFFF'}}>
                   Proffession
                 </Text>
               </View>
@@ -343,7 +356,9 @@ function Comment() {
                 fontSize: 10,
                 color: '#666666',
               }}>
-              {getUser(item?.user_id)?.city + ' ' + getUser(item?.user_id)?.state}
+              {getUser(item?.user_id)?.city +
+                ' ' +
+                getUser(item?.user_id)?.state}
             </Text>
           </View>
           <MaterialCommunityIcons
@@ -352,9 +367,11 @@ function Comment() {
             color={'#444444'}></MaterialCommunityIcons>
         </View>
 
-        {item?.comment && (<Text style={{ paddingHorizontal: 5, color: '#111111' }}>
-          {item?.comment}
-        </Text>)}
+        {item?.comment && (
+          <Text style={{paddingHorizontal: 5, color: '#111111'}}>
+            {item?.comment}
+          </Text>
+        )}
 
         {item.image && (
           <Image
@@ -362,11 +379,13 @@ function Comment() {
               marginTop: 20,
               flexWrap: 'wrap',
               width: width - 100,
-              height: 100
-            }} source={{ uri: item.image }} />)}
+              height: 100,
+            }}
+            source={{uri: item.image}}
+          />
+        )}
 
-
-        <View style={{ flex: 1, paddingTop: 15, justifyContent: 'flex-end' }}>
+        <View style={{flex: 1, paddingTop: 15, justifyContent: 'flex-end'}}>
           <Text
             style={{
               alignSelf: 'flex-end',
@@ -383,173 +402,183 @@ function Comment() {
   );
 
   return (
-      <View style={{ flex: 1, flexDirection: 'column' }}>
-        <View style={{ marginBottom: 64 }}>
-          <FlatList
-            style={{ width: Dimensions.get('screen').width }}
-            data={commentsData}
-            keyExtractor={item => item.id}
-            renderItem={renderItem}
-          />
-        </View>
+    <View style={{flex: 1, flexDirection: 'column'}}>
+      <View style={{marginBottom: 64}}>
+        <FlatList
+          style={{width: Dimensions.get('screen').width}}
+          data={commentsData}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+        />
+      </View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+        }}>
         <View
           style={{
-            flex: 1,
-            justifyContent: 'flex-end',
+            backgroundColor: '#EEEEEE',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            flexDirection: 'row',
+            marginBottom: 16,
+            paddingBottom: 16,
+            paddingTop: 6,
           }}>
           <View
             style={{
-              backgroundColor: '#EEEEEE',
+              height: 50,
+              borderWidth: 1,
+              borderRadius: 25,
+              borderColor: '#AAAAAA',
+              alignSelf: 'center',
               justifyContent: 'flex-start',
-              alignItems: 'flex-start',
+              width: Dimensions.get('screen').width - 100,
+              marginLeft: 16,
               flexDirection: 'row',
-              marginBottom: 16,
-              paddingBottom: 16,
-              paddingTop: 6,
             }}>
             <View
               style={{
-                height: 50,
-                borderWidth: 1,
+                height: 40,
                 borderRadius: 25,
-                borderColor: '#AAAAAA',
+                alignSelf: 'flex-start',
+                width: 40,
                 alignSelf: 'center',
-                justifyContent: 'flex-start',
-                width: Dimensions.get('screen').width - 100,
-                marginLeft: 16,
-                flexDirection: 'row',
+                backgroundColor: '#CCCCCC',
+                marginLeft: 5,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <View
+              <FontAwesomeIcon
+                name="user"
+                size={22}
+                color={'#FFFFFF'}></FontAwesomeIcon>
+            </View>
+            <TextInput
+              placeholder="Write a comment"
+              placeholderTextColor={'#444444'}
+              value={comment}
+              onChangeText={value => setComment(value)}
+              style={{
+                paddingLeft: 10,
+              }}></TextInput>
+            <TouchableOpacity onPress={() => requestCameraPermission()}>
+              <IoniconsIcons
+                style={{marginLeft: 70, marginTop: 13}}
+                name="image-outline"
+                size={22}
+                color={'black'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => (comment.length > 0 ? addComment() : null)}>
+              <IoniconsIcons
+                style={{marginLeft: 15, marginTop: 13}}
+                name="send-outline"
+                size={22}
+                color={'black'}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{alignSelf: 'center'}}>
+            <TouchableOpacity
+              style={{
+                height: 50,
+                borderRadius: 25,
+                alignSelf: 'flex-start',
+                width: 50,
+                backgroundColor: '#00005F',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}
+              onPress={() => {
+                setIsVisible(true);
+              }}>
+              <Image
+                source={require('../../assets/recording.png')}
                 style={{
-                  height: 40,
-                  borderRadius: 25,
-                  alignSelf: 'flex-start',
-                  width: 40,
+                  width: 28,
+                  height: 28,
+                  resizeMode: 'contain',
                   alignSelf: 'center',
-                  backgroundColor: '#CCCCCC',
-                  marginLeft: 5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <FontAwesomeIcon
-                  name="user"
-                  size={22}
-                  color={'#FFFFFF'}></FontAwesomeIcon>
-              </View>
-              <TextInput
-                placeholder="Write a comment"
-                placeholderTextColor={'#444444'}
-                value={comment}
-                onChangeText={value => setComment(value)}
-                style={{
-                  paddingLeft: 10,
-                }}></TextInput>
-              <TouchableOpacity onPress={() => requestCameraPermission()}>
-                <IoniconsIcons style={{ marginLeft: 70, marginTop: 13 }} name="image-outline" size={22} color={'black'} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => comment.length > 0 ? addComment() : null}>
-                <IoniconsIcons style={{ marginLeft: 15, marginTop: 13 }} name="send-outline" size={22} color={'black'} />
-              </TouchableOpacity>
-
-            </View>
-
-            <View style={{ alignSelf: 'center' }}>
-              <TouchableOpacity
-                style={{
-                  height: 50,
-                  borderRadius: 25,
-                  alignSelf: 'flex-start',
-                  width: 50,
-                  backgroundColor: '#00005F',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginLeft: 10,
-                }}
-                onPress={() => {
-                  setIsVisible(true);
-                }}>
-                <Image
-                  source={require('../../assets/recording.png')}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    resizeMode: 'contain',
-                    alignSelf: 'center',
-                  }}></Image>
-              </TouchableOpacity>
-            </View>
+                }}></Image>
+            </TouchableOpacity>
           </View>
         </View>
-        <Modal isVisible={isVisible}>
-          <View style={{ flex: 1, justifyContent: 'center' }}>
+      </View>
+      <Modal isVisible={isVisible}>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <View
+            style={{
+              height: width * 0.63,
+              width: width * 0.63,
+              backgroundColor: '#FFFFFF',
+              alignSelf: 'center',
+              flexDirection: 'column',
+            }}>
+            <IoniconsIcons
+              name="close"
+              color={'#000000'}
+              size={30}
+              style={{padding: 5}}
+              onPress={() => {
+                setIsVisible(false);
+              }}
+              style={{
+                alignSelf: 'flex-end',
+                paddingRight: 8,
+                paddingTop: 8,
+              }}></IoniconsIcons>
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <View
+                style={{
+                  backgroundColor: '#117711',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  height: 76,
+                  width: 76,
+                  borderRadius: 38,
+                }}>
+                {showIcon === true && (
+                  <Image
+                    source={require('../../assets/recording.png')}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      resizeMode: 'contain',
+                      alignSelf: 'center',
+                      marginVertical: 16,
+                    }}></Image>
+                )}
+              </View>
+            </View>
+
             <View
               style={{
-                height: width * 0.63,
-                width: width * 0.63,
-                backgroundColor: '#FFFFFF',
-                alignSelf: 'center',
+                flex: 1,
+                justifyContent: 'flex-end',
                 flexDirection: 'column',
               }}>
-              <IoniconsIcons
-                name="close"
-                color={'#000000'}
-                size={30}
-                style={{ padding: 5 }}
-                onPress={() => {
-                  setIsVisible(false);
-                }}
-                style={{
-                  alignSelf: 'flex-end',
-                  paddingRight: 8,
-                  paddingTop: 8,
-                }}></IoniconsIcons>
-              <View
-                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View
-                  style={{
-                    backgroundColor: '#117711',
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                    height: 76,
-                    width: 76,
-                    borderRadius: 38,
-                  }}>
-                  {showIcon === true && (
-                    <Image
-                      source={require('../../assets/recording.png')}
-                      style={{
-                        width: 32,
-                        height: 32,
-                        resizeMode: 'contain',
-                        alignSelf: 'center',
-                        marginVertical: 16,
-                      }}></Image>
-                  )}
-                </View>
-              </View>
+              <Text
+                style={{color: '#555555', alignSelf: 'center', marginTop: 12}}>
+                {recordTime}
+              </Text>
 
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                  flexDirection: 'column',
-                }}>
-                <Text
-                  style={{ color: '#555555', alignSelf: 'center', marginTop: 12 }}>
-                  {recordTime}
-                </Text>
-
-                {/* <Button
+              {/* <Button
                 icon="stop"
                 mode="outlined"
                 title='STOP'
                 style={{marginVertical: 8}}
                 onPress={() => onStopRecord()}></Button> */}
 
-                {/* <Text>
+              {/* <Text>
                 {playTime} / {duration}
               </Text> */}
-                {/* <Button
+              {/* <Button
                 mode="contained"
                 icon="play"
                 title='PLAY'
@@ -568,32 +597,32 @@ function Comment() {
                 style={{marginVertical: 8}}
                 onPress={() => onStopPlay()}></Button> */}
 
-                <Text
-                  style={{ color: '#555555', alignSelf: 'center', marginTop: 8 }}>
-                  Speak up, recording is going on!
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: '#000000',
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                    marginBottom: 10,
-                    marginTop: 16,
-                  }}
-                  onPress={() => {
-                    setIsVisible(false);
-                  }}>
-                  <Text style={{ color: '#FFFFFF', fontSize: 16 }}>Confirm</Text>
-                </TouchableOpacity>
-              </View>
+              <Text
+                style={{color: '#555555', alignSelf: 'center', marginTop: 8}}>
+                Speak up, recording is going on!
+              </Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#000000',
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  marginBottom: 10,
+                  marginTop: 16,
+                }}
+                onPress={() => {
+                  setIsVisible(false);
+                }}>
+                <Text style={{color: '#FFFFFF', fontSize: 16}}>Confirm</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
-export { Comment };
+export {Comment};
