@@ -203,8 +203,8 @@ const Login = () => {
                   justifyContent: 'center',
                 }}
                 onPress={() => {
-                  // signInWithPhoneNumber(phoneNumber);
-                  navigation.navigate("Home")
+                  signInWithPhoneNumber(phoneNumber);
+                  // navigation.navigate("Home")
                 }}>
                 <Text
                   style={{

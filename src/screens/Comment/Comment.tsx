@@ -320,7 +320,7 @@ function Comment() {
                   ' ' +
                   getUser(item?.user_id)?.lastName}
               </Text>
-              <View
+              {/* <View
                 style={{
                   backgroundColor: '#559544',
                   paddingHorizontal: 4,
@@ -333,7 +333,7 @@ function Comment() {
                   style={{fontWeight: '400', fontSize: 10, color: '#FFFFFF'}}>
                   Proffession
                 </Text>
-              </View>
+              </View> */}
             </View>
             <Text
               style={{
@@ -367,7 +367,7 @@ function Comment() {
               width: width - 100,
               height: 100,
             }}
-            source={{uri: item.image}}
+            source={{uri: item?.image}}
           />
         )}
 
@@ -380,7 +380,7 @@ function Comment() {
               fontSize: 11,
               color: '#444444',
             }}>
-            {/* { new Date(item?.createdDate) } */}
+            {/* {new Date(item?.updatedDate)} */}
           </Text>
         </View>
       </View>
