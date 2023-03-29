@@ -15,7 +15,7 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 import DB_COLLECTION from '../../utils/constants';
 import FirebaseApp from '@react-native-firebase/app';
 import OtpInputs from 'react-native-otp-inputs';
-import { fetchUser } from '../../redux/slices/userSlice';
+import { addUser, fetchUser } from '../../redux/slices/userSlice';
 import { SnackBar } from '../../toast/SnackBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -27,33 +27,33 @@ const Login = () => {
   const [code, setCode] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [invalidPhoneNumber, setInvalidPhoneNumber] = useState(false);
-  const [fistName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const dispatch = useDispatch();
   const AllUserData = useSelector((state: RootState) => state.user.userData);
   const [isExist, setIsExist] = useState(false);
   // Handle login
-  function onAuthStateChanged(user: any) {
-    if (user) {
-      // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-      // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-      // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-      // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
-      if (user?.uid !== '') {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{name: 'Home'}],
-          }),
-        );
-      }
-    }
-  }
+  // function onAuthStateChanged(user: any) {
+  //   if (user) {
+  //     // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
+  //     // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
+  //     // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
+  //     // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
+  //     if (user?.uid !== '') {
+  //       navigation.dispatch(
+  //         CommonActions.reset({
+  //           index: 1,
+  //           routes: [{ name: 'Home' }],
+  //         }),
+  //       );
+  //     }
+  //   }
+  // }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -61,6 +61,9 @@ const Login = () => {
 
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber: any) {
+    // setIsExist(false);
+    // setConfirm(true);
+
     // navigation.navigate('Verify');
     const reg = /^\+?([0-9]{2})\)?[789]\d{9}$/;
     if (reg.test('+91' + phoneNumber) === false) {
@@ -75,13 +78,32 @@ const Login = () => {
 
   async function confirmCode() {
     try {
-       await confirm?.confirm(code).then(res => {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{ name: 'Home' }],
-          }),
-        );
+      await confirm?.confirm(code).then(res => {
+        // navigation.dispatch(
+        //   CommonActions.reset({
+        //     index: 1,
+        //     routes: [{ name: 'Home' }],
+        //   }),
+        // );
+      
+          const userReq = {
+            city: "Pune",
+            createdDate: new Date(),
+            dob: new Date(),
+            firstName: firstName,
+            lastName: lastName,
+            mobileNumber: phoneNumber,
+            id: res?.uid,
+            pincode: 411037,
+            profile: "",
+            state: "Maharashtra",
+            status: true,
+            updatedDate: new Date()
+          };
+          dispatch(addUser(userReq));
+     
+        console.log(userReq)
+        navigation.navigate('Home')
       });
     } catch (error) {
       SnackBar('Invalid code, Please enter correct OTP for Login');
@@ -153,7 +175,7 @@ const Login = () => {
                 // }}
                 value={phoneNumber}
                 placeholder="Mobile no."></TextInput>
-              {phoneNumber.length !== 0 && invalidPhoneNumber === true && (
+              {phoneNumber.length !== 0 && phoneNumber.length === 10 && invalidPhoneNumber === true && (
                 <KeyboardAvoidingView>
                   <Text
                     style={{
@@ -163,7 +185,7 @@ const Login = () => {
                       marginTop: 1,
                       color: '#FF0000',
                     }}>
-                    *please enter valid mobile number. e.g. +918379888926
+                    *please enter valid mobile number. e.g. 8379888926
                   </Text>
                 </KeyboardAvoidingView>
               )}
@@ -178,7 +200,7 @@ const Login = () => {
                   justifyContent: 'center',
                 }}
                 onPress={() => {
-                signInWithPhoneNumber(phoneNumber);
+                  signInWithPhoneNumber(phoneNumber);
                 }}>
                 <Text
                   style={{
@@ -220,57 +242,64 @@ const Login = () => {
                 alignItems: 'flex-start',
                 flexDirection: 'column',
               }}>
-                { isExist ? null : 
-                <View>
-              <TextInput
-                style={{
-                  height: 40,
-                  paddingLeft: 10,
-                  marginTop: 16,
-                  borderWidth: 1,
-                  width: Dimensions.get('screen').width - 32,
-                  borderRadius: 5,
-                }}
-                maxLength={13}
-                returnKeyType={'done'}
-                onChangeText={value => setFirstName(value)}
-                value={fistName}
-                placeholder="First name"
-              />
-              <TextInput
-                style={{
-                  height: 40,
-                  paddingLeft: 10,
-                  marginTop: 16,
-                  borderWidth: 1,
-                  width: Dimensions.get('screen').width - 32,
-                  borderRadius: 5,
-                }}
-                maxLength={13}
-                returnKeyType={'done'}
-                onChangeText={value => setLastName(value)}
-                value={lastName}
-                placeholder="Last name"
-              />  </View> }
-              <Text
-                style={{
-                  height: 24,
-                  fontSize: 18,
-                  fontWeight: '600',
-                  marginTop: 24,
-                  color: '#000000',
+
+              {!isExist &&
+                (<View>
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingLeft: 10,
+                      marginTop: 16,
+                      borderWidth: 1,
+                      width: Dimensions.get('screen').width - 32,
+                      borderRadius: 5,
+                    }}
+                    maxLength={13}
+                    returnKeyType={'done'}
+                    onChangeText={value => setFirstName(value)}
+                    value={firstName}
+                    placeholder="First name"
+                  />
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingLeft: 10,
+                      marginTop: 16,
+                      borderWidth: 1,
+                      width: Dimensions.get('screen').width - 32,
+                      borderRadius: 5,
+                    }}
+                    maxLength={13}
+                    returnKeyType={'done'}
+                    onChangeText={value => setLastName(value)}
+                    value={lastName}
+                    placeholder="Last name"
+                  />
+                </View>)}
+
+              <View style={{
+                  marginTop: isExist ? 0 : 150
                 }}>
-                Verification Code
-              </Text>
-              <Text
-                style={{
-                  height: 20,
-                  fontSize: 16,
-                  fontWeight: '400',
-                  marginTop: 20,
-                }}>
-                To login, please enter OTP sent via SMS
-              </Text>
+                <Text
+                  style={{
+                    height: 24,
+                    fontSize: 18,
+                    fontWeight: '600',
+                    // paddingBottom: 5,
+                    color: '#000000',
+                  }}>
+                  Verification Code
+                </Text>
+                <Text
+                  style={{
+                    height: 20,
+                    fontSize: 16,
+                    fontWeight: '400',
+                    marginTop: 55,
+                  }}>
+                  To login, please enter OTP sent via SMS
+                </Text>
+              </View>
               <View style={{ height: 100 }}>
                 <OtpInputs
                   handleChange={code => {
@@ -292,7 +321,7 @@ const Login = () => {
                   style={{
                     borderColor: '#000000',
                     flexDirection: 'row',
-                    marginTop: 8,
+                    marginTop: 28,
                     alignItems: 'center',
                     justifyContent: 'flex-start',
                   }}
@@ -309,7 +338,7 @@ const Login = () => {
                     justifyContent: 'center',
                   }}
                   onPress={() => {
-                    (fistName?.length > 0 && lastName?.length > 0 && code?.length === 6) ?  confirmCode() : SnackBar('Please enter First name, Last Name & OTP for Login.');
+                    (!isExist && firstName?.length > 0 && lastName?.length > 0 && code?.length === 6) ? confirmCode() : isExist ? confirmCode() : SnackBar('Please enter First name, Last Name & OTP for Login.');
                   }}>
                   <Text
                     style={{

@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity,
   FlatList,
   Image,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ScrollView } from 'react-native-gesture-handler';
 import firestore from "@react-native-firebase/firestore";
 
 import DB_COLLECTION from '../../utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import auth from '@react-native-firebase/auth';
+import { useDispatch } from 'react-redux';
 import { useRoute } from '@react-navigation/core';
 import { addUser, fetchUser } from '../../redux/slices/userSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,9 +18,8 @@ import IoniconsIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const Home = () => {
-  const [userName, setUserName] = React.useState('');
-  const [changeUsername, onChangeNumber] = React.useState('');
-  const route = useRoute();
+  // const [userName, setUserName] = React.useState('');
+  // const [changeUsername, onChangeNumber] = React.useState('');
   const dispatch = useDispatch();
 
   const [menus] = React.useState([
@@ -39,35 +32,42 @@ const Home = () => {
   const [crops, setCropsData] = React.useState([]);
   useEffect(() => {
     getCropsData();
-  }, [])
-  const AllUserData = useSelector((state: RootState) => state.user.userData);
-
-  useEffect(() => {
-    const isAlreadyExist = AllUserData.find(u => u && u?.mobileNumber === auth()?.currentUser?.phoneNumber);
-  // if(!isAlreadyExist){
-  //   addUser();
-  // }
-  createUser();
-  }, [])
-
-  const createUser = () => {
-    const userReq = {
-      city: "Pune",
-      createdDate: new Date(),
-      dob: new Date(),
-      firstName: 'Ajju',
-      lastName: 'Ajju',
-      mobileNumber: auth()?.currentUser?.phoneNumber,
-      id: auth()?.currentUser?.uid,
-      pincode: 411037,
-      profile: "",
-      state: "Maharashtra",
-      status: true,
-      updatedDate: new Date()
-    };
-    dispatch(addUser(userReq));
     dispatch(fetchUser());
-  }
+  }, [])
+  // const createUser = () => {
+  //   const userReq = {
+  //     city: "Pune",
+  //     createdDate: new Date(),
+  //     dob: new Date(),
+  //     firstName: route?.params?.firstName,
+  //     lastName: route?.params?.lastName,
+  //     mobileNumber: route?.params?.mobile,
+  //     id: auth()?.currentUser?.uid,
+  //     pincode: 411037,
+  //     profile: "",
+  //     state: "Maharashtra",
+  //     status: true,
+  //     updatedDate: new Date()
+  //   };
+  //   dispatch(addUser(userReq));
+  //   dispatch(fetchUser());
+  // }
+  // const AllUserData = useSelector((state: RootState) => state.user.userData);
+  // console.log(" first name in home outside ",route?.params?.firstName);
+
+  // useEffect(() => {
+  //   if (AllUserData) {
+  //     console.log(" first name in home inside",route?.params?.firstName);
+  //     const isAlreadyExist = AllUserData.find(u => u && u?.mobileNumber === route?.params?.mobile);
+  //     console.log(isAlreadyExist ?  true : false);
+  //     const res = isAlreadyExist ?  true : false;
+  //     if (!res && route?.params?.firstName && route?.params?.lastName) {
+  //       createUser();
+  //       console.log('inside');
+  //     }
+  //   }
+  // }, [])
+
   const getCropsData = async () => {
     try {
       const cropData = await firestore().collection(DB_COLLECTION.CROP.name).doc(DB_COLLECTION.CROP.id).get();
