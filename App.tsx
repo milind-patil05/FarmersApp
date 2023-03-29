@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 import {Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -27,6 +28,13 @@ import DiseaseManagement from './src/screens/DiseaseManagement/DiseaseManagement
 import WeatherUpdate from './src/screens/WeatherUpdate/WeatherUpdate';
 import GovernmentScheme from './src/screens/GovernmentScheme/GovernmentScheme';
 import FarmerCorner from './src/screens/FarmerCorner/FarmerCorner';
+import {ChangeLanguage} from './src/screens/ChangeLanguage';
+// import i18n, {ModuleType} from 'i18next';
+// import {initReactI18next} from 'react-i18next';
+import {getLangData, getLogin} from './src/utils/Storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// import i18next from './src/utils/Languages/i18n';
+import {useTranslation} from 'react-i18next';
 import FarmAssistBot from './src/screens/FarmAssistBot/FarmAssistBot';
 
 const Stack = createNativeStackNavigator();
@@ -184,15 +192,29 @@ const routes: any[] = [
     component: TakePhoto,
     headerShown: true,
   },
+  {
+    name: 'Change Language',
+    component: ChangeLanguage,
+    headerShown: true,
+  },
 ];
 
 const LoginComponent = (props: any) => <Login {...props} />;
 
 function App() {
+  const {t, i18n} = useTranslation();
   const toastConfig = {
     error: ({props}) => <ToastComponent {...props} />,
   };
 
+  useEffect(() => {
+    getLangData().then(async lang => {
+      if (!lang) {
+        await AsyncStorage.setItem('lang', 'en');
+        i18n.changeLanguage('en');
+      }
+    });
+  }, []);
   return (
     <Provider store={store}>
       <NavigationContainer>

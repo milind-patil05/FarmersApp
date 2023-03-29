@@ -1,0 +1,11 @@
+{
+  "translation": {
+    "LOGIN": "Login",
+    "REQUESTOTP": "Request OTP",
+    "CHANGEAPPLANGUAGE": "Change App Language",
+    "CROPDETAILS": "Crop Details",
+    "VERIFICATIONCODE": "Verification Code",
+    "TOLOGIN": "To login, please enter OTP sent via SMS",
+    "VERIFYOTP": "Verify OTP"
+  }
+}

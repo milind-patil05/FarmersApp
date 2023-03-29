@@ -19,8 +19,10 @@ import {useDispatch} from 'react-redux';
 import {fetchUser} from '../../redux/slices/userSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 const Home = () => {
+  const {t} = useTranslation();
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
@@ -270,7 +272,7 @@ const Home = () => {
                 marginTop: 24,
                 color: '#000000',
               }}>
-              Crop Details
+              {t('CROPDETAILS')}
             </Text>
             <View
               style={{
