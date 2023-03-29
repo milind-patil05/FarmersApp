@@ -21,7 +21,7 @@ export const fetchPosts = createAsyncThunk(
 export const createPost = createAsyncThunk(
   'firestore/PostCreate',
   async (data: any) => {
-    await firestore().collection("posts").add({data}).then(res =>{
+    await firestore().collection("posts").add(data).then(res =>{
       return res
     }).catch(error => {
       return error.code;
@@ -32,7 +32,7 @@ export const createPost = createAsyncThunk(
 export const updatePost = createAsyncThunk(
   'firestore/updatePost',
   async (data) => {
-    await firestore().collection("posts").doc('r7FqlWqtvUfQTckcJXmw').update({data}).then(res =>{
+    await firestore().collection("posts").doc('r7FqlWqtvUfQTckcJXmw').update(data).then(res =>{
       return res;
     }).catch(error => {
       return error.code;

@@ -18,7 +18,8 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import { Provider } from "react-redux";
 import { store } from './src/redux/store';
-
+import Toast from 'react-native-toast-message';
+import ToastComponent from './src/toast/ToastComponent';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -146,6 +147,9 @@ const routes: any[] = [
 const LoginComponent = (props: any) => <Login {...props} />;
 
 function App() {
+  const toastConfig = {
+    error: ({ props }) => <ToastComponent {...props} />,
+  };
   return (
     <Provider store={store}>
     <NavigationContainer>
@@ -169,6 +173,13 @@ function App() {
           ))}
       </Stack.Navigator>
     </NavigationContainer>
+      <Toast
+        position="bottom"
+        bottomOffset={65}
+        config={toastConfig}
+        autoHide={true}
+        visibilityTime={3000}
+      />
     </Provider>
   );
 }

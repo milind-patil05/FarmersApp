@@ -18,11 +18,12 @@ export const fetchUser = createAsyncThunk(
   }
 )
 
-export const createUser = createAsyncThunk(
-  'firestore/userCreate',
+export const addUser = createAsyncThunk(
+  'firestore/UserCreate',
   async (data: any) => {
-    await firestore().collection("user").add({data}).then(res =>{
-      return res
+    await firestore().collection("user").add(data).then(res =>{
+      console.log(res);
+      return res;
     }).catch(error => {
       return error.code;
     });
@@ -32,7 +33,7 @@ export const createUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'firestore/updateUser',
   async (data) => {
-    await firestore().collection("user").doc('r7FqlWqtvUfQTckcJXmw').update({data}).then(res =>{
+    await firestore().collection("user").doc('r7FqlWqtvUfQTckcJXmw').update(data).then(res =>{
       return res;
     }).catch(error => {
       return error.code;
@@ -67,17 +68,17 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.userData = action.payload
     }),
-    builder.addCase(createUser.fulfilled, (state, action) => {
+    builder.addCase(addUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.userData = action.payload
+      // state.userData = action.payload;
     }),
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.userData = action.payload
+      state.userData = action.payload;
     }),
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.userData = action.payload
+      state.userData = action.payload;
     })
   },
 });

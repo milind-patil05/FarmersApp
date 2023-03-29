@@ -21,8 +21,8 @@ export const fetchComments= createAsyncThunk(
 export const createComment = createAsyncThunk(
   'firestore/CommentCreate',
   async (data: any) => {
-    await firestore().collection("Comments").add({data}).then(res =>{
-      return res
+    await firestore().collection("comments").add(data).then(res =>{
+      return res;
     }).catch(error => {
       return error.code;
     });
@@ -32,7 +32,7 @@ export const createComment = createAsyncThunk(
 export const updateComment = createAsyncThunk(
   'firestore/updateComment',
   async (data) => {
-    await firestore().collection("Comments").doc('r7FqlWqtvUfQTckcJXmw').update({data}).then(res =>{
+    await firestore().collection("comments").doc('r7FqlWqtvUfQTckcJXmw').update(data).then(res =>{
       return res;
     }).catch(error => {
       return error.code;
@@ -43,7 +43,7 @@ export const updateComment = createAsyncThunk(
 export const deleteComment = createAsyncThunk(
   'firestore/deleteComment',
   async () => {
-    await firestore().collection("Comments").doc('A8heMQs94V8Jie2pqcO3').delete().then(res =>{
+    await firestore().collection("comments").doc('A8heMQs94V8Jie2pqcO3').delete().then(res =>{
       return res;
     }).catch(error => {
       return error.code;
@@ -51,9 +51,21 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
-const initialState: { commentsData: any[], isLoading: boolean } = {
-    commentsData: [],
+export const getDocId = createAsyncThunk(
+  'firestore/getDocId',
+  async (id) => {
+    await firestore().collection("comments").where('id', '==', id).get().then(res =>{
+      return res;
+    }).catch(error => {
+      return error.code;
+    });
+  }
+);
+
+const initialState: { commentsData: any[], isLoading: boolean, docId: string } = {
+  commentsData: [],
   isLoading: false,
+  docId: ""
 };
 
 
@@ -69,15 +81,20 @@ export const commentsSlice = createSlice({
     }),
     builder.addCase(createComment.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.CommentData = action.payload
+      // state.commentsData = action.payload
     }),
     builder.addCase(deleteComment.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.CommentData = action.payload
+      // state.commentsData = action.payload
     }),
     builder.addCase(updateComment.fulfilled, (state, action) => {
       state.isLoading = false;
-      // state.CommentData = action.payload
+      // state.commentsData = action.payload
+    }),
+    builder.addCase(getDocId.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.docId = action.payload;
+      // state.commentsData = action.payload
     })
   },
 });

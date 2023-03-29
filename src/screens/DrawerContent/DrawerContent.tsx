@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import {
   CommonActions,
   useNavigation,
@@ -8,9 +8,25 @@ import {
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import auth from '@react-native-firebase/auth';
 
 function DrawerContent() {
   const navigation = useNavigation();
+
+  const userSignOut = () => {
+    return auth()
+      .signOut()
+      .then(result => {
+        navigation.dispatch(DrawerActions.closeDrawer());
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: 'Login' }],
+          }),
+        );
+      });
+  };
 
   return (
     <View
@@ -25,10 +41,10 @@ function DrawerContent() {
         name="close-outline"
         size={30}
         onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}
-        style={{alignSelf: 'flex-end', paddingRight: 45}}
+        style={{ alignSelf: 'flex-end', paddingRight: 45 }}
       />
       <TouchableOpacity
-        style={{flexDirection: 'row'}}
+        style={{ flexDirection: 'row' }}
         onPress={() => {
           navigation.dispatch(DrawerActions.closeDrawer());
           navigation.navigate('Settings');
@@ -45,7 +61,7 @@ function DrawerContent() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{flexDirection: 'row', marginTop: 16}}
+        style={{ flexDirection: 'row', marginTop: 16 }}
         onPress={() => {
           navigation.dispatch(DrawerActions.closeDrawer());
           navigation.navigate('Profile');
@@ -62,15 +78,9 @@ function DrawerContent() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{flexDirection: 'row', marginTop: 16}}
+        style={{ flexDirection: 'row', marginTop: 16 }}
         onPress={() => {
-          navigation.dispatch(DrawerActions.closeDrawer());
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [{ name: 'Login' }],
-            }),
-          );
+          userSignOut();
         }}>
         <FontAwesome5Icon name="sign-out-alt" size={24} color={'#000000'} />
         <Text
@@ -87,4 +97,4 @@ function DrawerContent() {
   );
 }
 
-export {DrawerContent};
+export { DrawerContent };

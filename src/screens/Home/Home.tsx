@@ -14,10 +14,18 @@ import { ScrollView } from 'react-native-gesture-handler';
 import firestore from "@react-native-firebase/firestore";
 
 import DB_COLLECTION from '../../utils/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import auth from '@react-native-firebase/auth';
+import { useRoute } from '@react-navigation/core';
+import { addUser, fetchUser } from '../../redux/slices/userSlice';
 
 const Home = () => {
   const [userName, setUserName] = React.useState('');
   const [changeUsername, onChangeNumber] = React.useState('');
+  const route = useRoute();
+  const dispatch = useDispatch();
+
   const [menus] = React.useState([
     { key: '1', title: 'Common Practices', image: DB_COLLECTION.COMMON_PRACTICES },
     { key: '2', title: 'Weather Updates', image: DB_COLLECTION.WEATHER_UPDATES },
@@ -29,7 +37,34 @@ const Home = () => {
   useEffect(() => {
     getCropsData();
   }, [])
+  const AllUserData = useSelector((state: RootState) => state.user.userData);
 
+  useEffect(() => {
+    const isAlreadyExist = AllUserData.find(u => u && u?.mobileNumber === auth()?.currentUser?.phoneNumber);
+  // if(!isAlreadyExist){
+  //   addUser();
+  // }
+  createUser();
+  }, [])
+
+  const createUser = () => {
+    const userReq = {
+      city: "Pune",
+      createdDate: new Date(),
+      dob: new Date(),
+      firstName: 'Ajju',
+      lastName: 'Ajju',
+      mobileNumber: auth()?.currentUser?.phoneNumber,
+      id: auth()?.currentUser?.uid,
+      pincode: 411037,
+      profile: "",
+      state: "Maharashtra",
+      status: true,
+      updatedDate: new Date()
+    };
+    dispatch(addUser(userReq));
+    dispatch(fetchUser());
+  }
   const getCropsData = async () => {
     try {
       const cropData = await firestore().collection(DB_COLLECTION.CROP.name).doc(DB_COLLECTION.CROP.id).get();

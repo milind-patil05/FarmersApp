@@ -5,7 +5,7 @@ import AntDesignIcons from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation, CommonActions} from '@react-navigation/native';
-import { fetchPosts } from '../../redux/slices/postsSlice';
+import { createPost, fetchPosts } from '../../redux/slices/postsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { fetchUser } from '../../redux/slices/userSlice';
@@ -26,12 +26,31 @@ function Community() {
   const commentsData = useSelector((state: RootState) => state.comments.commentsData);
 
   const likeCount = (postId: number) => {
-  return postsData.filter(post => post && post.id === postId && post.like) };
-  const unlikeCount = (postId: number) => { return postsData.filter(post => post && post.id === postId && post.unlike) };
+  return postsData.find(post => post && post.id === postId ) };
+  const unlikeCount = (postId: number) => { return postsData.find(post => post && post.id === postId) };
   const commentCount = (postId: number) => {
     return commentsData.filter(comment => comment && comment.post_id === postId) };
   const getUser = (userId: number) => {
      return userData.filter(user => user && user.id === userId)[0];
+  }
+
+  const addpost = () => {
+    const postReq = {
+      id: ids.includes(Math.floor(Math.random() * 100000)) ? Math.floor(Math.random() * 100000) : Math.floor(Math.random() * 100000),
+      audio: "",
+      message: "abc",
+      createdDate: new Date(),
+      image: "",
+      like: [],
+      status: true,
+      unlike: [],
+      updatedDate: new Date(),
+      user_id: "12345"
+    }
+    dispatch(createPost(postReq));
+    dispatch(fetchPosts());
+    // setComment("");
+    // Keyboard.dismiss()
   }
 
   const renderItem = ({item}: any) => (
@@ -158,7 +177,7 @@ function Community() {
                 marginLeft: 5,
                 color: '#000000',
               }}>
-              {likeCount(item?.id)?.length}
+              {likeCount(item?.id)?.like.length}
             </Text>
           </View>
 
@@ -182,7 +201,7 @@ function Community() {
                 marginLeft: 5,
                 color: '#000000',
               }}>
-              {unlikeCount(item?.id)?.length}
+              {unlikeCount(item?.id)?.unlike?.length}
             </Text>
           </View>
 
@@ -194,7 +213,7 @@ function Community() {
               justifyContent: 'flex-start',
             }}
             onPress={() => {
-              navigation.navigate('Comment');
+              navigation.navigate('Comment', {postId: item.id});
             }}>
             <FontAwesomeIcon
               name={'comment-o'}
