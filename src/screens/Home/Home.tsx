@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,34 +6,40 @@ import {
   Dimensions,
   FlatList,
   Image,
+  DrawerLayoutAndroid,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
-import firestore from "@react-native-firebase/firestore";
+import firestore from '@react-native-firebase/firestore';
 
 import DB_COLLECTION from '../../utils/constants';
-import { useDispatch } from 'react-redux';
-import { useRoute } from '@react-navigation/core';
-import { addUser, fetchUser } from '../../redux/slices/userSlice';
+import {useDispatch} from 'react-redux';
+import {useRoute} from '@react-navigation/core';
+import {addUser, fetchUser} from '../../redux/slices/userSlice';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IoniconsIcons from 'react-native-vector-icons/Ionicons';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-
+import {useNavigation, CommonActions} from '@react-navigation/native';
 const Home = () => {
   // const [userName, setUserName] = React.useState('');
   // const [changeUsername, onChangeNumber] = React.useState('');
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const [menus] = React.useState([
-    { key: '1', title: 'Common Practices', image: DB_COLLECTION.COMMON_PRACTICES },
-    { key: '2', title: 'Weather Updates', image: DB_COLLECTION.WEATHER_UPDATES },
-    { key: '3', title: 'Diseage management', image: DB_COLLECTION.Dis_MAGEMENT },
-    { key: '4', title: 'Govenrment schemes', image: DB_COLLECTION.GOV_SCHEMES },
-    { key: '5', title: 'Farmers Corner', image: DB_COLLECTION.FARMERS_CORNER },
+    {
+      key: '1',
+      title: 'Common Practices',
+      image: DB_COLLECTION.COMMON_PRACTICES,
+    },
+    {key: '2', title: 'Weather Updates', image: DB_COLLECTION.WEATHER_UPDATES},
+    {key: '3', title: 'Diseage management', image: DB_COLLECTION.Dis_MAGEMENT},
+    {key: '4', title: 'Govenrment schemes', image: DB_COLLECTION.GOV_SCHEMES},
+    {key: '5', title: 'Farmers Corner', image: DB_COLLECTION.FARMERS_CORNER},
   ]);
   const [crops, setCropsData] = React.useState([]);
   useEffect(() => {
     getCropsData();
     dispatch(fetchUser());
-  }, [])
+  }, []);
   // const createUser = () => {
   //   const userReq = {
   //     city: "Pune",
@@ -70,18 +76,20 @@ const Home = () => {
 
   const getCropsData = async () => {
     try {
-      const cropData = await firestore().collection(DB_COLLECTION.CROP.name).doc(DB_COLLECTION.CROP.id).get();
+      const cropData = await firestore()
+        .collection(DB_COLLECTION.CROP.name)
+        .doc(DB_COLLECTION.CROP.id)
+        .get();
       const data = await cropData._data.cropData;
       setCropsData(data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   return (
-    <SafeAreaView>
-      <View style={{ flex:1, flexDirection: 'column' }}>
-
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <View
           style={{
             height: Dimensions.get('window').height - 60,
@@ -89,16 +97,15 @@ const Home = () => {
             padding: 16,
             flexDirection: 'column',
           }}>
-
           <View>
             <FlatList
               style={{width: Dimensions.get('window').width - 32}}
               horizontal={true}
               data={crops}
               keyExtractor={item => item.id}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <View
-                  style={{ flexDirection: 'column', marginRight: 16, flex: 1 }}>
+                  style={{flexDirection: 'column', marginRight: 16, flex: 1}}>
                   <View
                     style={{
                       justifyContent: 'flex-start',
@@ -112,7 +119,7 @@ const Home = () => {
                       source={{uri: item.image}}
                       style={{
                         height: 80,
-                        width: 80
+                        width: 80,
                       }}
                     />
                   </View>
@@ -140,7 +147,13 @@ const Home = () => {
               }}>
               Crop Details
             </Text>
-            <View style={{ flex: 1, flexWrap: 'wrap', marginTop: 24, paddingBottom: 84 }}>
+            <View
+              style={{
+                flex: 1,
+                flexWrap: 'wrap',
+                marginTop: 24,
+                paddingBottom: 84,
+              }}>
               <FlatList
                 numColumns={2}
                 showsVerticalScrollIndicator={false}
@@ -152,8 +165,8 @@ const Home = () => {
                 contentContainerStyle={{
                   flexGrow: 1,
                 }}
-                renderItem={({ item }) => (
-                  <View style={{ flexDirection: 'column', margin: 12, flex: 1 }}>
+                renderItem={({item}) => (
+                  <View style={{flexDirection: 'column', margin: 12, flex: 1}}>
                     <View
                       style={{
                         justifyContent: 'flex-start',
@@ -164,11 +177,12 @@ const Home = () => {
                         flexWrap: 'wrap',
                       }}>
                       <Image
-                        source={{ uri: item.image }}
+                        source={{uri: item.image}}
                         style={{
                           height: (Dimensions.get('window').width - 40) * 0.5,
-                          width: (Dimensions.get('window').width - 60) * 0.5
-                        }} />
+                          width: (Dimensions.get('window').width - 60) * 0.5,
+                        }}
+                      />
                     </View>
                     <Text
                       style={{
@@ -183,18 +197,56 @@ const Home = () => {
             </View>
           </View>
         </View>
-        <View style={{position: 'absolute',  alignSelf:'center'}}>
-          <FontAwesomeIcon
-            name="user"
-            size={22}
-            color={
-              item?.user_id === currentUser ? '#000000' : '#FFFFFF'
-            }>
-          </FontAwesomeIcon>
-        </View>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('Select Options');
+          }}
+          style={styles.touchableOpacityStyle}>
+          <MaterialCommunityIcons
+            name="message-reply-text-outline"
+            color={'#FFFFFF'}
+            size={33}></MaterialCommunityIcons>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    padding: 10,
+  },
+  titleStyle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 10,
+  },
+  textStyle: {
+    fontSize: 16,
+    textAlign: 'center',
+    padding: 10,
+  },
+  touchableOpacityStyle: {
+    position: 'absolute',
+    width: 54,
+    height: 54,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+    backgroundColor: '#464646',
+    borderRadius: 27,
+  },
+  floatingButtonStyle: {
+    // resizeMode: 'contain',
+    width: 50,
+    height: 50,
+    backgroundColor: '#333333',
+  },
+});
 
 export {Home};

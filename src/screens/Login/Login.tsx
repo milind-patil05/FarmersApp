@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,14 +11,14 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import auth from '@react-native-firebase/auth';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import DB_COLLECTION from '../../utils/constants';
 import FirebaseApp from '@react-native-firebase/app';
 import OtpInputs from 'react-native-otp-inputs';
-import { addUser, fetchUser } from '../../redux/slices/userSlice';
-import { SnackBar } from '../../toast/SnackBar';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import {addUser, fetchUser} from '../../redux/slices/userSlice';
+import {SnackBar} from '../../toast/SnackBar';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -64,16 +64,20 @@ const Login = () => {
     // setIsExist(false);
     // setConfirm(true);
 
-    // navigation.navigate('Verify');
+    navigation.navigate('Verify OTP');
     const reg = /^\+?([0-9]{2})\)?[789]\d{9}$/;
-    if (reg.test('+91' + phoneNumber) === false) {
-      setInvalidPhoneNumber(true);
-    } else {
-      const isAlreadyExist = AllUserData.find(u => u && u?.mobileNumber === '+91' + phoneNumber);
-      setIsExist(isAlreadyExist ?  true : false);
-      const confirmation = await auth(FirebaseApp.app()).signInWithPhoneNumber('+91' + phoneNumber);
-      setConfirm(confirmation);
-    }
+    // if (reg.test('+91' + phoneNumber) === false) {
+    //   setInvalidPhoneNumber(true);
+    // } else {
+    //   const isAlreadyExist = AllUserData.find(
+    //     u => u && u?.mobileNumber === '+91' + phoneNumber,
+    //   );
+    //   setIsExist(isAlreadyExist ? true : false);
+    //   const confirmation = await auth(FirebaseApp.app()).signInWithPhoneNumber(
+    //     '+91' + phoneNumber,
+    //   );
+    //   setConfirm(confirmation);
+    // }
   }
 
   async function confirmCode() {
@@ -85,25 +89,25 @@ const Login = () => {
         //     routes: [{ name: 'Home' }],
         //   }),
         // );
-      
-          const userReq = {
-            city: "Pune",
-            createdDate: new Date(),
-            dob: new Date(),
-            firstName: firstName,
-            lastName: lastName,
-            mobileNumber: phoneNumber,
-            id: res?.uid,
-            pincode: 411037,
-            profile: "",
-            state: "Maharashtra",
-            status: true,
-            updatedDate: new Date()
-          };
-          dispatch(addUser(userReq));
-     
-        console.log(userReq)
-        navigation.navigate('Home')
+
+        const userReq = {
+          city: 'Pune',
+          createdDate: new Date(),
+          dob: new Date(),
+          firstName: firstName,
+          lastName: lastName,
+          mobileNumber: phoneNumber,
+          id: res?.uid,
+          pincode: 411037,
+          profile: '',
+          state: 'Maharashtra',
+          status: true,
+          updatedDate: new Date(),
+        };
+        dispatch(addUser(userReq));
+
+        console.log(userReq);
+        navigation.navigate('Home');
       });
     } catch (error) {
       SnackBar('Invalid code, Please enter correct OTP for Login');
@@ -112,8 +116,8 @@ const Login = () => {
 
   return (
     <SafeAreaView>
-      <View style={{ flexDirection: 'column' }}>
-        <View style={{ flex: 1, padding: 16, flexDirection: 'column' }}>
+      <View style={{flexDirection: 'column'}}>
+        <View style={{flex: 1, padding: 16, flexDirection: 'column'}}>
           <View
             style={{
               height: 200,
@@ -123,14 +127,14 @@ const Login = () => {
               backgroundColor: '#D9D9D9',
             }}>
             <Image
-              source={{ uri: DB_COLLECTION.LOGIN }}
+              source={{uri: DB_COLLECTION.LOGIN}}
               style={{
                 height: 200,
-                width: Dimensions.get('screen').width - 32
+                width: Dimensions.get('screen').width - 32,
               }}
             />
           </View>
-          {!confirm ?
+          {!confirm ? (
             <View
               style={{
                 width: Dimensions.get('screen').width,
@@ -175,20 +179,22 @@ const Login = () => {
                 // }}
                 value={phoneNumber}
                 placeholder="Mobile no."></TextInput>
-              {phoneNumber.length !== 0 && phoneNumber.length === 10 && invalidPhoneNumber === true && (
-                <KeyboardAvoidingView>
-                  <Text
-                    style={{
-                      height: 14,
-                      fontSize: 10,
-                      fontWeight: '400',
-                      marginTop: 1,
-                      color: '#FF0000',
-                    }}>
-                    *please enter valid mobile number. e.g. 8379888926
-                  </Text>
-                </KeyboardAvoidingView>
-              )}
+              {phoneNumber.length !== 0 &&
+                phoneNumber.length === 10 &&
+                invalidPhoneNumber === true && (
+                  <KeyboardAvoidingView>
+                    <Text
+                      style={{
+                        height: 14,
+                        fontSize: 10,
+                        fontWeight: '400',
+                        marginTop: 1,
+                        color: '#FF0000',
+                      }}>
+                      *please enter valid mobile number. e.g. 8379888926
+                    </Text>
+                  </KeyboardAvoidingView>
+                )}
               <TouchableOpacity
                 style={{
                   backgroundColor: '#000000',
@@ -220,8 +226,7 @@ const Login = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                onPress={() => {
-                }}>
+                onPress={() => {}}>
                 <Text
                   style={{
                     fontSize: 12,
@@ -235,16 +240,15 @@ const Login = () => {
                 </Text>
               </TouchableOpacity>
             </View>
-            :
+          ) : (
             <View
               style={{
                 width: Dimensions.get('screen').width,
                 alignItems: 'flex-start',
                 flexDirection: 'column',
               }}>
-
-              {!isExist &&
-                (<View>
+              {!isExist && (
+                <View>
                   <TextInput
                     style={{
                       height: 40,
@@ -275,10 +279,12 @@ const Login = () => {
                     value={lastName}
                     placeholder="Last name"
                   />
-                </View>)}
+                </View>
+              )}
 
-              <View style={{
-                  marginTop: isExist ? 0 : 150
+              <View
+                style={{
+                  marginTop: isExist ? 0 : 150,
                 }}>
                 <Text
                   style={{
@@ -300,7 +306,7 @@ const Login = () => {
                   To login, please enter OTP sent via SMS
                 </Text>
               </View>
-              <View style={{ height: 100 }}>
+              <View style={{height: 100}}>
                 <OtpInputs
                   handleChange={code => {
                     setCode(code);
@@ -338,7 +344,16 @@ const Login = () => {
                     justifyContent: 'center',
                   }}
                   onPress={() => {
-                    (!isExist && firstName?.length > 0 && lastName?.length > 0 && code?.length === 6) ? confirmCode() : isExist ? confirmCode() : SnackBar('Please enter First name, Last Name & OTP for Login.');
+                    !isExist &&
+                    firstName?.length > 0 &&
+                    lastName?.length > 0 &&
+                    code?.length === 6
+                      ? confirmCode()
+                      : isExist
+                      ? confirmCode()
+                      : SnackBar(
+                          'Please enter First name, Last Name & OTP for Login.',
+                        );
                   }}>
                   <Text
                     style={{
@@ -352,11 +367,11 @@ const Login = () => {
                 </TouchableOpacity>
               </View>
             </View>
-          }
+          )}
         </View>
       </View>
     </SafeAreaView>
   );
 };
 
-export { Login };
+export {Login};

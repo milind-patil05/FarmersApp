@@ -21,6 +21,8 @@ import { Provider } from "react-redux";
 import { store } from './src/redux/store';
 import Toast from 'react-native-toast-message';
 import ToastComponent from './src/toast/ToastComponent';
+import { SelectOptions } from './src/screens/SelectOptions';
+import { TakePhoto } from './src/screens/TakePhoto';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -134,7 +136,7 @@ const routes: any[] = [
     headerShown: true,
   },
   {
-    name: 'Verify',
+    name: 'Verify OTP',
     component: Verify,
     headerShown: true,
   },
@@ -144,8 +146,18 @@ const routes: any[] = [
     headerShown: true,
   },
   {
-    name: 'Create new post',
+    name: 'Select Options',
+    component: SelectOptions,
+    headerShown: true,
+  },
+  {
+    name: 'Create New Post',
     component: PostScreen,
+    headerShown: true,
+  },
+  {
+    name: 'Take Photo',
+    component: TakePhoto,
     headerShown: true,
   },
 ];
