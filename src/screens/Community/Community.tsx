@@ -135,17 +135,14 @@ function Community() {
           }}>
           {item?.message}
         </Text>
-        {item?.image && (
-          <Image
-            style={{
-              marginTop: 20,
-              flexWrap: 'wrap',
-              width: Dimensions.get('screen').width - 36,
-              height: 100,
-            }}
-            source={{uri: item.image}}
-          />
-        )}
+        {item?.image?.assets[0]?.uri && (
+        <Image 
+        style={{
+          marginTop: 20,
+          flexWrap: 'wrap',
+          width: Dimensions.get('screen').width - 36,
+          height: 100
+        }} source={{uri: item?.image?.assets[0]?.uri}} /> )}
 
         <Text
           style={{
@@ -193,7 +190,7 @@ function Community() {
                 marginLeft: 5,
                 color: '#000000',
               }}>
-              {likeCount(item?.id)?.like.length}
+              {likeCount(item?.id)?.like?.length}
             </Text>
           </View>
 

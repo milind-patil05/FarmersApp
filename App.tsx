@@ -8,7 +8,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home} from './src/screens/Home';
 import {Community} from './src/screens/Community';
-import {Weather} from './src/screens/Weather';
 import {Profile} from './src/screens/Profile';
 import {Settings} from './src/screens/Settings';
 import {Login} from './src/screens/Login';
@@ -36,6 +35,7 @@ import {getLangData, getLogin} from './src/utils/Storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // import i18next from './src/utils/Languages/i18n';
 import {useTranslation} from 'react-i18next';
+import FarmAssistBot from './src/screens/FarmAssistBot/FarmAssistBot';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -99,7 +99,7 @@ const MyTabs = () => {
         component={Community}
       />
       <Tab.Screen
-        name="Weather"
+        name="FarmAssistBot"
         options={{
           headerShown: false,
           tabBarLabel: ({focused, color, position}) => {
@@ -109,21 +109,21 @@ const MyTabs = () => {
                   fontSize: 10.5,
                   color: focused ? '#000000' : '#797979',
                 }}>
-                Weather
+                FarmAssistBot
               </Text>
             );
           },
           tabBarIcon: ({color, focused}) => {
             return (
               <FontAwesomeIcon
-                name="cloud-sun-rain"
+                name="robot"
                 size={24}
                 color={focused ? '#000000' : '#797979'}
               />
             );
           },
         }}
-        component={Weather}
+        component={FarmAssistBot}
       />
     </Tab.Navigator>
   );
@@ -153,8 +153,8 @@ const routes: any[] = [
     headerShown: false,
   },
   {
-    name: 'Weather',
-    component: Weather,
+    name: 'FarmAssistBot',
+    component: FarmAssistBot,
     headerShown: false,
   },
   {
@@ -246,7 +246,7 @@ function App() {
             name="Govenrment schemes"
             component={GovernmentScheme}
           />
-          <Stack.Screen name="Farmers Corner" component={FarmerCorner} />
+          <Stack.Screen name="Mandi Rates" component={FarmerCorner} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast

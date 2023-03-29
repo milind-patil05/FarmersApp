@@ -52,15 +52,14 @@ function Comment() {
   const route = useRoute();
   const [galleryPhoto, setGalleryPhoto] = useState('');
   const userData = useSelector((state: RootState) => state.user.userData);
-  const commentsData = useSelector(
+  let commentsData = useSelector(
     (state: RootState) => state.comments.commentsData,
   );
-
+  commentsData = commentsData?.filter(ele => ele && ele?.post_id === route?.params?.postId);
   const getUser = (userId: number) => {
     return userData?.filter(user => user && user.id === userId)[0];
   };
   const currentUser = auth()?.currentUser;
-  console.log('current user', currentUser);
   useEffect(() => {
     dispatch(fetchUser());
     dispatch(fetchComments());
@@ -92,7 +91,6 @@ function Comment() {
     // uploads file
     await reference.putFile(galleryPhoto);
     const res = await reference.getDownloadURL();
-    console.log('image url', res);
   };
 
   const requestCameraPermission = async () => {
@@ -111,9 +109,7 @@ function Comment() {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         openGallery();
-        console.log('You can use the camera');
       } else {
-        console.log('Camera permission denied');
       }
     } catch (err) {
       console.warn(err);
@@ -149,7 +145,6 @@ function Comment() {
               // PermissionsAndroid.PERMISSIONS.READ_INTERNAL_STORAGE,
             ]);
 
-            console.log('write external stroage', grants);
 
             if (
               grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
@@ -162,7 +157,6 @@ function Comment() {
               setPermissionGranted(true);
               startAudiRecording();
             } else {
-              console.log('All required permissions not granted');
               return;
             }
           } catch (err) {
@@ -224,14 +218,12 @@ function Comment() {
       AVNumberOfChannelsKeyIOS: 2,
       AVFormatIDKeyIOS: AVEncodingOption.aac,
     };
-    console.log('audioSet', audioSet);
     const uri = await audioRecorderPlayer.startRecorder(path, audioSet);
 
     // const uri = await audioRecorderPlayer.startRecorder();
     audioRecorderPlayer.addRecordBackListener((e: any) => {
       setRecordSecs(e.currentPosition);
       setRecordTime(audioRecorderPlayer.mmssss(Math.floor(e.currentPosition)));
-      console.log(`Recording started uri: ${uri}`);
       // return;
     });
   };
@@ -240,16 +232,12 @@ function Comment() {
     const result = await audioRecorderPlayer.stopRecorder();
     audioRecorderPlayer.removeRecordBackListener();
     setRecordSecs(0);
-    console.log('stopped ', result);
   };
 
   const onStartPlay = async () => {
-    console.log('onStartPlay');
     const msg = await audioRecorderPlayer.startPlayer();
-    console.log('startPlay ', msg);
     audioRecorderPlayer.addPlayBackListener(e => {
       if (e.currentPosition === e.duration) {
-        console.log('finished');
         audioRecorderPlayer.stopPlayer();
       }
       setCurrentPositionSec(e.currentPosition);
@@ -261,12 +249,10 @@ function Comment() {
   };
 
   const onPausePlay = async () => {
-    console.log('pause');
     await audioRecorderPlayer.pausePlayer();
   };
 
   const onStopPlay = async () => {
-    console.log('onStopPlay');
     audioRecorderPlayer.stopPlayer();
     audioRecorderPlayer.removePlayBackListener();
   };
@@ -334,7 +320,7 @@ function Comment() {
                   ' ' +
                   getUser(item?.user_id)?.lastName}
               </Text>
-              <View
+              {/* <View
                 style={{
                   backgroundColor: '#559544',
                   paddingHorizontal: 4,
@@ -347,7 +333,7 @@ function Comment() {
                   style={{fontWeight: '400', fontSize: 10, color: '#FFFFFF'}}>
                   Proffession
                 </Text>
-              </View>
+              </View> */}
             </View>
             <Text
               style={{
@@ -381,7 +367,7 @@ function Comment() {
               width: width - 100,
               height: 100,
             }}
-            source={{uri: item.image}}
+            source={{uri: item?.image}}
           />
         )}
 
@@ -394,7 +380,7 @@ function Comment() {
               fontSize: 11,
               color: '#444444',
             }}>
-            {/* { new Date(item?.createdDate) } */}
+            {/* {new Date(item?.updatedDate)} */}
           </Text>
         </View>
       </View>
