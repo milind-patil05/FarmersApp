@@ -22,7 +22,7 @@ export const addUser = createAsyncThunk(
   'firestore/UserCreate',
   async (data: any) => {
     await firestore().collection("user").add(data).then(res =>{
-      console.log(res);
+      console.log("user silce", res);
       return res;
     }).catch(error => {
       return error.code;
