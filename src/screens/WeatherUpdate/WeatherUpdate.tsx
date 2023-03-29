@@ -42,7 +42,7 @@ const CommonPractices = () => {
           }}>
           {item?.prompt}
         </Text>
-        <VideoPlayer
+        {/* <VideoPlayer
           video={{
             uri: 'https://www.youtube.com/watch?v=zJwHKgj5BwM',
           }}
@@ -51,7 +51,7 @@ const CommonPractices = () => {
           defaultMuted={true}
           videoHeight={500}
           thumbnail={require('../../assets/recording.png')}
-        />
+        /> */}
         <Text
           style={{padding: 8, color: 'black', fontSize: 15}}
           numberOfLines={15}>
