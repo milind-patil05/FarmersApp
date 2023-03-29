@@ -163,7 +163,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
     implementation platform('com.google.firebase:firebase-auth')
-    implementation project(':react-native-audio-recorder-player')
+    // implementation project(':react-native-audio-recorder-player')
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {
@@ -176,5 +176,5 @@ project.ext.react = [
         enableHermes: true,  // clean and rebuild if changing
 ]
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+//apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

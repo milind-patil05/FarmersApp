@@ -17,40 +17,66 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 // import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSet,
-  AudioSourceAndroidType,
-} from 'react-native-audio-recorder-player';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { fetchUser } from '../../redux/slices/userSlice';
-import { fetchComments } from '../../redux/slices/commentsSlice';
+// import AudioRecorderPlayer, {
+//   AVEncoderAudioQualityIOSType,
+//   AVEncodingOption,
+//   AudioEncoderAndroidType,
+//   AudioSourceAndroidType,
+//   OutputFormatAndroidType,
+// } from 'react-native-audio-recorder-player';
+// import type {
+//   AudioSet,
+//   PlayBackType,
+//   RecordBackType,
+// } from 'react-native-audio-recorder-player';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
+import {fetchUser} from '../../redux/slices/userSlice';
+import {fetchComments} from '../../redux/slices/commentsSlice';
 import auth from '@react-native-firebase/auth';
+interface State {
+  isLoggingIn: boolean;
+  recordSecs: number;
+  recordTime: string;
+  currentPositionSec: number;
+  currentDurationSec: number;
+  playTime: string;
+  duration: string;
+}
+
 function Comment() {
   const width = Dimensions.get('screen').width;
   const height = Dimensions.get('screen').height;
   const [isVisible, setIsVisible] = useState(false);
-  const  dispatch = useDispatch();
+  const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user.userData);
-  const commentsData = useSelector((state: RootState) => state.comments.commentsData);
+  const commentsData = useSelector(
+    (state: RootState) => state.comments.commentsData,
+  );
+
   const getUser = (userId: number) => {
-       return userData.filter(user => user && user.id === userId)[0];
-    }
-    const currentUser = auth().currentUser;
-    console.log(currentUser);
+    return userData.filter(user => user && user.id === userId)[0];
+  };
+  const currentUser = auth().currentUser;
+  console.log('currentUser: ', currentUser);
 
-    useEffect(() => {
-      dispatch(fetchUser());
-      dispatch(fetchComments());
-    },[])
 
-    const likeCount = (commentId: number) => {return commentsData.filter(comment => comment && comment.id === commentId && comment.like) };
-    const unlikeCount = (commentId: number) => { return commentsData.filter(comment => comment && comment.id === commentId && comment.unlike) };
+  useEffect(() => {
+    dispatch(fetchUser());
+    dispatch(fetchComments());
+  }, []);
 
-  const [permissionGranted, setPermissionGranted] = useState(false);
+  const likeCount = (commentId: number) => {
+    return commentsData.filter(
+      comment => comment && comment.id === commentId && comment.like,
+    );
+  };
+  const unlikeCount = (commentId: number) => {
+    return commentsData.filter(
+      comment => comment && comment.id === commentId && comment.unlike,
+    );
+  };
+
   const navigation = useNavigation();
   const [recordSecs, setRecordSecs] = useState(0);
   const [recordTime, setRecordTime] = useState('00:00:00');
@@ -59,59 +85,56 @@ function Comment() {
   const [currentDurationSec, setCurrentDurationSec] = useState(0);
   const [playTime, setPlayTime] = useState('00:00:00');
   const [duration, setDuration] = useState('00:00:00');
-  const audioRecorderPlayer = new AudioRecorderPlayer();
-  audioRecorderPlayer.setSubscriptionDuration(0.09);
 
   useEffect(() => {
     async function setPermisstions() {
+      // audioRecorderPlayer = new AudioRecorderPlayer();
+      // audioRecorderPlayer.setSubscriptionDuration(0.1);
       // You can await here
-      if (isVisible === true) {
-        if (Platform.OS === 'android') {
-          try {
-            const grants = await PermissionsAndroid.requestMultiple([
-              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-              PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-              PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-              // PermissionsAndroid.PERMISSIONS.WRITE_INTERNAL_STORAGE,
-              // PermissionsAndroid.PERMISSIONS.READ_INTERNAL_STORAGE,
-            ]);
+      if (Platform.OS === 'android') {
+        try {
+          const grants = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+            // PermissionsAndroid.PERMISSIONS.WRITE_INTERNAL_STORAGE,
+            // PermissionsAndroid.PERMISSIONS.READ_INTERNAL_STORAGE,
+          ]);
 
-            console.log('write external stroage', grants);
+          console.log('write external stroage', grants);
 
-            if (
-              grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-                PermissionsAndroid.RESULTS.GRANTED &&
-              grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-                PermissionsAndroid.RESULTS.GRANTED &&
-              grants['android.permission.RECORD_AUDIO'] ===
-                PermissionsAndroid.RESULTS.GRANTED
-            ) {
-              setPermissionGranted(true);
-              startAudiRecording();
-            } else {
-              console.log('All required permissions not granted');
-              return;
-            }
-          } catch (err) {
-            console.warn(err);
+          if (
+            grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            grants['android.permission.READ_EXTERNAL_STORAGE'] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            grants['android.permission.RECORD_AUDIO'] ===
+              PermissionsAndroid.RESULTS.GRANTED
+          ) {
+            console.log('All required permissions are granted');
+            return;
+            // startAudiRecording();
+          } else {
+            console.log('All required permissions not granted');
             return;
           }
+        } catch (err) {
+          console.warn(err);
+          return;
         }
       }
-      // ...
     }
     setPermisstions();
   }, []);
 
   useEffect(() => {
-    if (isVisible === true) {
-      // Change the state every second or the time given by User.
-      startAudiRecording();
-      const interval = setInterval(() => {
-        setShowIcon(showIcon => !showIcon);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
+    console.log('1111');
+    // Change the state every second or the time given by User.
+    startAudiRecording();
+    // const interval = setInterval(() => {
+    //   setShowIcon(showIcon => !showIcon);
+    // }, 1000);
+    // return () => clearInterval(interval);
   }, [isVisible]);
 
   const startAudiRecording = async () => {
@@ -119,26 +142,23 @@ function Comment() {
       ios: 'hello.m4a',
       android: 'sdcard/hello.mp4',
     });
-    // let path = Environment.getExternalStoragePublicDirectory(
-    //   Environment.DIRECTORY_MOVIES,
-    // );
-    // File file = new File(path, "/" + fname);
-    const audioSet: AudioSet = {
+     const audioSet: AudioSet = {
       AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
       AudioSourceAndroid: AudioSourceAndroidType.MIC,
       AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
       AVNumberOfChannelsKeyIOS: 2,
       AVFormatIDKeyIOS: AVEncodingOption.aac,
+      OutputFormatAndroid: OutputFormatAndroidType.AAC_ADTS,
     };
     console.log('audioSet', audioSet);
     const uri = await audioRecorderPlayer.startRecorder(path, audioSet);
 
     // const uri = await audioRecorderPlayer.startRecorder();
-    audioRecorderPlayer.addRecordBackListener((e: any) => {
+    audioRecorderPlayer.addRecordBackListener((e: RecordBackType) => {
       setRecordSecs(e.currentPosition);
       setRecordTime(audioRecorderPlayer.mmssss(Math.floor(e.currentPosition)));
       console.log(`Recording started uri: ${uri}`);
-      // return;
+      return;
     });
   };
 
@@ -180,8 +200,7 @@ function Comment() {
   const renderItem = ({item}: any) => (
     <View
       style={{
-        flexDirection:
-          item?.user_id === currentUser ? 'row-reverse' : 'row',
+        flexDirection: item?.user_id === currentUser ? 'row-reverse' : 'row',
         flex: 1,
         marginTop: 16,
         paddingHorizontal: 16,
@@ -197,21 +216,24 @@ function Comment() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-          { getUser(item?.user_id)?.profile ? (<Image
-              source={{uri: getUser(item?.user_id)?.profile}}
-              style={{
-                width: 28,
-                height: 28,
-                resizeMode: 'contain',
-                alignSelf: 'center',
-              }} /> ) : (<FontAwesomeIcon
-                name="user"
-                size={22}
-                color={
-                  item?.user_id === currentUser ? '#000000' : '#FFFFFF'
-                }>
-                </FontAwesomeIcon>)}
-        
+        {getUser(item?.user_id)?.profile ? (
+          <Image
+            source={{uri: getUser(item?.user_id)?.profile}}
+            style={{
+              width: 28,
+              height: 28,
+              resizeMode: 'contain',
+              alignSelf: 'center',
+            }}
+          />
+        ) : (
+          <FontAwesomeIcon
+            name="user"
+            size={22}
+            color={
+              item?.user_id === currentUser ? '#000000' : '#FFFFFF'
+            }></FontAwesomeIcon>
+        )}
       </View>
       <View
         style={{
@@ -234,7 +256,9 @@ function Comment() {
           <View style={{flexDirection: 'column', paddingLeft: 5}}>
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontWeight: '600', fontSize: 14, color: '#000000'}}>
-                {getUser(item?.user_id)?.firstName + ' ' + getUser(item?.user_id)?.lastName}
+                {getUser(item?.user_id)?.firstName +
+                  ' ' +
+                  getUser(item?.user_id)?.lastName}
               </Text>
               <View
                 style={{
@@ -258,7 +282,9 @@ function Comment() {
                 fontSize: 10,
                 color: '#666666',
               }}>
-              {getUser(item?.user_id)?.city + ' ' + getUser(item?.user_id)?.state}
+              {getUser(item?.user_id)?.city +
+                ' ' +
+                getUser(item?.user_id)?.state}
             </Text>
           </View>
           <MaterialCommunityIcons
@@ -267,19 +293,23 @@ function Comment() {
             color={'#444444'}></MaterialCommunityIcons>
         </View>
 
-        { item?.comment && (<Text style={{paddingHorizontal: 5, color: '#111111'}}>
-          {item?.comment}
-        </Text> )}
+        {item?.comment && (
+          <Text style={{paddingHorizontal: 5, color: '#111111'}}>
+            {item?.comment}
+          </Text>
+        )}
 
         {item.image && (
-        <Image 
-        style={{
-          marginTop: 20,
-          flexWrap: 'wrap',
-          width: width - 100,
-          height: 100
-        }} source={{uri: item.image}} /> )}
-
+          <Image
+            style={{
+              marginTop: 20,
+              flexWrap: 'wrap',
+              width: width - 100,
+              height: 100,
+            }}
+            source={{uri: item.image}}
+          />
+        )}
 
         <View style={{flex: 1, paddingTop: 15, justifyContent: 'flex-end'}}>
           <Text
@@ -288,7 +318,7 @@ function Comment() {
               marginBottom: 5,
               marginRight: 5,
               fontSize: 11,
-               color: '#444444',
+              color: '#444444',
             }}>
             {/* { new Date(item?.createdDate) } */}
           </Text>
