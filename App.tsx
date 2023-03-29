@@ -17,12 +17,17 @@ import {PostScreen} from './src/screens/PostScreen';
 import {DrawerContent} from './src/screens/DrawerContent';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
-import { Provider } from "react-redux";
-import { store } from './src/redux/store';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 import Toast from 'react-native-toast-message';
 import ToastComponent from './src/toast/ToastComponent';
 import { SelectOptions } from './src/screens/SelectOptions';
 import { TakePhoto } from './src/screens/TakePhoto';
+import CommonPractices from './src/screens/CommonPratices/CommonPractices';
+import DiseaseManagement from './src/screens/DiseaseManagement/DiseaseManagement';
+import WeatherUpdate from './src/screens/WeatherUpdate/WeatherUpdate';
+import GovernmentScheme from './src/screens/GovernmentScheme/GovernmentScheme';
+import FarmerCorner from './src/screens/FarmerCorner/FarmerCorner';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,7 +51,13 @@ const MyTabs = () => {
             );
           },
           tabBarIcon: ({color, focused}) => {
-            return(<IoniconsIcon name="home" size={24} color={focused ? '#000000' : '#797979'}/>);
+            return (
+              <IoniconsIcon
+                name="home"
+                size={24}
+                color={focused ? '#000000' : '#797979'}
+              />
+            );
           },
         }}
         component={Home}
@@ -67,7 +78,13 @@ const MyTabs = () => {
             );
           },
           tabBarIcon: ({color, focused}) => {
-            return(<FontAwesomeIcon name="users" size={24} color={focused ? '#000000' : '#797979'}/>);
+            return (
+              <FontAwesomeIcon
+                name="users"
+                size={24}
+                color={focused ? '#000000' : '#797979'}
+              />
+            );
           },
         }}
         component={Community}
@@ -88,7 +105,13 @@ const MyTabs = () => {
             );
           },
           tabBarIcon: ({color, focused}) => {
-            return(<FontAwesomeIcon name="cloud-sun-rain" size={24} color={focused ? '#000000' : '#797979'}/>);
+            return (
+              <FontAwesomeIcon
+                name="cloud-sun-rain"
+                size={24}
+                color={focused ? '#000000' : '#797979'}
+              />
+            );
           },
         }}
         component={Weather}
@@ -166,31 +189,42 @@ const LoginComponent = (props: any) => <Login {...props} />;
 
 function App() {
   const toastConfig = {
-    error: ({ props }) => <ToastComponent {...props} />,
+    error: ({props}) => <ToastComponent {...props} />,
   };
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginComponent}
-          options={{title: 'Login'}}
-        />
-        {routes &&
-          routes.length > 0 &&
-          routes.map(route => (
-            <Stack.Screen
-              key={route.name}
-              name={route.name}
-              component={route.component}
-              options={{
-                headerShown: route.headerShown,
-              }}
-            />
-          ))}
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={LoginComponent}
+            options={{title: 'Login'}}
+          />
+          {routes &&
+            routes.length > 0 &&
+            routes.map(route => (
+              <Stack.Screen
+                key={route.name}
+                name={route.name}
+                component={route.component}
+                options={{
+                  headerShown: route.headerShown,
+                }}
+              />
+            ))}
+          <Stack.Screen name="Common Practices" component={CommonPractices} />
+          <Stack.Screen name="Weather Updates" component={WeatherUpdate} />
+          <Stack.Screen
+            name="Diseage management"
+            component={DiseaseManagement}
+          />
+          <Stack.Screen
+            name="Govenrment schemes"
+            component={GovernmentScheme}
+          />
+          <Stack.Screen name="Farmers Corner" component={FarmerCorner} />
+        </Stack.Navigator>
+      </NavigationContainer>
       <Toast
         position="bottom"
         bottomOffset={65}
