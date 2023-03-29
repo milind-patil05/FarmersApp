@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 // Import required components
 import {
@@ -10,17 +11,28 @@ import {
   Platform,
   PermissionsAndroid,
   TextInput,
+  Alert,
 } from 'react-native';
 
 // Import Image Picker
 // import ImagePicker from 'react-native-image-picker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useDispatch, useSelector} from 'react-redux';
+import {createPost, fetchPosts} from '../../redux/slices/postsSlice';
+import {RootState} from '../../redux/store';
 
 function TakePhoto() {
   const [filePath, setFilePath] = useState({});
   const [showConfirmButton, setShowConfirmButton] = useState(false);
   const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
+  const fileURI = useSelector((state: RootState) => state?.posts?.postsData);
+  const navigation = useNavigation();
 
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
+  console.log(' data ', fileURI[0]?.image?.assets[0].uri);
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -131,25 +143,41 @@ function TakePhoto() {
       console.log('height -> ', response.height);
       console.log('fileSize -> ', response.fileSize);
       console.log('type -> ', response.type);
-      console.log('fileName -> ', response.fileName);
+      console.log('fileName -> ', response.assets[0].uri);
       setFilePath(response);
       setShowConfirmButton(true);
     });
   }; // 'data:image/jpeg;base64,' +
-
+  const addPost = () => {
+    const postReq = {
+      id: Math.floor(Math.random() * 100000),
+      audio: '',
+      message: description,
+      createdDate: new Date(),
+      image: filePath,
+      like: [],
+      status: true,
+      unlike: [],
+      updatedDate: new Date(),
+      user_id: '12345',
+    };
+    dispatch(createPost(postReq));
+    Alert.alert('Post added successfully');
+    navigation.replace('Community');
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         {filePath?.assets && (
           <Image
             source={{
-              uri: filePath?.assets[0]?.uri,
+              uri: filePath.assets[0].uri,
             }}
             style={styles.imageStyle}
           />
         )}
-        {/* <Image source={{uri: filePath.uri}} style={styles.imageStyle} /> */}
-        <Text style={styles.textStyle}>{filePath.uri}</Text>
+        {/* <Image source={{uri: filePath}} style={styles.imageStyle} /> */}
+        {/* <Text style={styles.textStyle}>{filePath?.assets[0]?.fileName}</Text> */}
         {/* <TouchableOpacity
           activeOpacity={0.5}
           style={styles.buttonStyle}
@@ -180,6 +208,7 @@ function TakePhoto() {
           onPress={() => {
             if (showConfirmButton === true) {
               console.log('confirm');
+              addPost();
             }
           }}>
           <Text style={styles.confirmTextStyle}>Confirm</Text>
