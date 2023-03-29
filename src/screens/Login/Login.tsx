@@ -61,23 +61,20 @@ const Login = () => {
 
   // Handle the button press
   async function signInWithPhoneNumber(phoneNumber: any) {
-    // setIsExist(false);
-    // setConfirm(true);
 
-    navigation.navigate('Verify OTP');
     const reg = /^\+?([0-9]{2})\)?[789]\d{9}$/;
-    // if (reg.test('+91' + phoneNumber) === false) {
-    //   setInvalidPhoneNumber(true);
-    // } else {
-    //   const isAlreadyExist = AllUserData.find(
-    //     u => u && u?.mobileNumber === '+91' + phoneNumber,
-    //   );
-    //   setIsExist(isAlreadyExist ? true : false);
-    //   const confirmation = await auth(FirebaseApp.app()).signInWithPhoneNumber(
-    //     '+91' + phoneNumber,
-    //   );
-    //   setConfirm(confirmation);
-    // }
+    if (reg.test('+91' + phoneNumber) === false) {
+      setInvalidPhoneNumber(true);
+    } else {
+      const isAlreadyExist = AllUserData.find(
+        u => u && u?.mobileNumber === '+91' + phoneNumber,
+      );
+      setIsExist(isAlreadyExist ? true : false);
+      const confirmation = await auth(FirebaseApp.app()).signInWithPhoneNumber(
+        '+91' + phoneNumber,
+      );
+      setConfirm(confirmation);
+    }
   }
 
   async function confirmCode() {
@@ -350,7 +347,7 @@ const Login = () => {
                     lastName?.length > 0 &&
                     code?.length === 6
                       ? confirmCode()
-                      : isExist
+                      : isExist && code?.length === 6
                       ? confirmCode()
                       : SnackBar(
                           'Please enter First name, Last Name & OTP for Login.',

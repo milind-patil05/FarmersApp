@@ -222,7 +222,7 @@ function App() {
             name="Govenrment schemes"
             component={GovernmentScheme}
           />
-          <Stack.Screen name="Farmers Corner" component={FarmerCorner} />
+          <Stack.Screen name="Mandi Rates" component={FarmerCorner} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast

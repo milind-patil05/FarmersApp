@@ -36,7 +36,7 @@ const Home = () => {
     {key: '2', title: 'Weather Updates', image: DB_COLLECTION.WEATHER_UPDATES},
     {key: '3', title: 'Diseage management', image: DB_COLLECTION.Dis_MAGEMENT},
     {key: '4', title: 'Govenrment schemes', image: DB_COLLECTION.GOV_SCHEMES},
-    {key: '5', title: 'Farmers Corner', image: DB_COLLECTION.FARMERS_CORNER},
+    {key: '5', title: 'Mandi Rates', image: DB_COLLECTION.FARMERS_CORNER},
   ]);
 
   const [crops, setCropsData] = React.useState([]);
@@ -204,12 +204,12 @@ const Home = () => {
     //     adddata();
       }, [])
 
-  async function adddata() {
-     return await firestore().collection("GOV_SCHEME").add(data);
-}
+//   async function adddata() {
+//      return await firestore().collection("GOV_SCHEME").add(data);
+// }
 
   const customNavigation = (title: any) => {
-    if(title != 'Weather Updates')
+    if(title != 'Weather Updates' && title != 'Diseage management')
     navigation.navigate(title);
   };
   return (

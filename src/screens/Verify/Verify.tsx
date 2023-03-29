@@ -29,7 +29,6 @@ const Verify = () => {
   // Handle login
   function onAuthStateChanged(user: any) {
     if (user) {
-      console.log('##### ', user);
       // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
       // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
       // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
