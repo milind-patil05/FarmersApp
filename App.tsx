@@ -7,7 +7,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home} from './src/screens/Home';
 import {Community} from './src/screens/Community';
-import {Weather} from './src/screens/Weather';
 import {Profile} from './src/screens/Profile';
 import {Settings} from './src/screens/Settings';
 import {Login} from './src/screens/Login';
@@ -21,13 +20,15 @@ import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
 import Toast from 'react-native-toast-message';
 import ToastComponent from './src/toast/ToastComponent';
-import { SelectOptions } from './src/screens/SelectOptions';
-import { TakePhoto } from './src/screens/TakePhoto';
+import {SelectOptions} from './src/screens/SelectOptions';
+import {TakePhoto} from './src/screens/TakePhoto';
 import CommonPractices from './src/screens/CommonPratices/CommonPractices';
 import DiseaseManagement from './src/screens/DiseaseManagement/DiseaseManagement';
 import WeatherUpdate from './src/screens/WeatherUpdate/WeatherUpdate';
 import GovernmentScheme from './src/screens/GovernmentScheme/GovernmentScheme';
 import FarmerCorner from './src/screens/FarmerCorner/FarmerCorner';
+import FarmAssistBot from './src/screens/FarmAssistBot/FarmAssistBot';
+
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +91,7 @@ const MyTabs = () => {
         component={Community}
       />
       <Tab.Screen
-        name="Weather"
+        name="FarmAssistBot"
         options={{
           headerShown: false,
           tabBarLabel: ({focused, color, position}) => {
@@ -100,21 +101,21 @@ const MyTabs = () => {
                   fontSize: 10.5,
                   color: focused ? '#000000' : '#797979',
                 }}>
-                Weather
+                FarmAssistBot
               </Text>
             );
           },
           tabBarIcon: ({color, focused}) => {
             return (
               <FontAwesomeIcon
-                name="cloud-sun-rain"
+                name="robot"
                 size={24}
                 color={focused ? '#000000' : '#797979'}
               />
             );
           },
         }}
-        component={Weather}
+        component={FarmAssistBot}
       />
     </Tab.Navigator>
   );
@@ -144,8 +145,8 @@ const routes: any[] = [
     headerShown: false,
   },
   {
-    name: 'Weather',
-    component: Weather,
+    name: 'FarmAssistBot',
+    component: FarmAssistBot,
     headerShown: false,
   },
   {
@@ -191,6 +192,7 @@ function App() {
   const toastConfig = {
     error: ({props}) => <ToastComponent {...props} />,
   };
+
   return (
     <Provider store={store}>
       <NavigationContainer>
