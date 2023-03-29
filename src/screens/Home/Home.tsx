@@ -19,6 +19,9 @@ import { RootState } from '../../redux/store';
 import auth from '@react-native-firebase/auth';
 import { useRoute } from '@react-navigation/core';
 import { addUser, fetchUser } from '../../redux/slices/userSlice';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IoniconsIcons from 'react-native-vector-icons/Ionicons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const Home = () => {
   const [userName, setUserName] = React.useState('');
@@ -77,7 +80,7 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <View style={{ flexDirection: 'column' }}>
+      <View style={{ flex:1, flexDirection: 'column' }}>
 
         <View
           style={{
@@ -179,6 +182,15 @@ const Home = () => {
               />
             </View>
           </View>
+        </View>
+        <View style={{position: 'absolute',  alignSelf:'center'}}>
+          <FontAwesomeIcon
+            name="user"
+            size={22}
+            color={
+              item?.user_id === currentUser ? '#000000' : '#FFFFFF'
+            }>
+          </FontAwesomeIcon>
         </View>
       </View>
     </SafeAreaView>
