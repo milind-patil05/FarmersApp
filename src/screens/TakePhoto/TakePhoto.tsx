@@ -150,12 +150,12 @@ function TakePhoto() {
         )}
         {/* <Image source={{uri: filePath.uri}} style={styles.imageStyle} /> */}
         <Text style={styles.textStyle}>{filePath.uri}</Text>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={0.5}
           style={styles.buttonStyle}
           onPress={() => captureImage('photo')}>
           <Text style={styles.textStyle}>Launch Camera for Image</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.buttonStyle}

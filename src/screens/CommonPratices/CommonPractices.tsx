@@ -12,7 +12,6 @@ const CommonPractices = () => {
         .doc('LoZQkeEA06uuWtegME1S')
         .get();
       const data = await cropData._data.data;
-      console.log(data);
       setPracticeData(data);
     } catch (err) {
       console.log(err);

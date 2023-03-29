@@ -9,10 +9,9 @@ const CommonPractices = () => {
     try {
       const cropData = await firestore()
         .collection('GOV_SCHEME')
-        .doc('jLUXJ0jwXAElnQQdcjAU')
+        .doc('WrvJEpk8cA437Yp1tbES')
         .get();
-      const data = await cropData._data.data;
-      console.log(data);
+      const data = await cropData._data;
       setPracticeData(data);
     } catch (err) {
       console.log(err);
@@ -40,22 +39,13 @@ const CommonPractices = () => {
             padding: 8,
             textAlign: 'center',
           }}>
-          {item?.prompt}
+          {item?.name}
         </Text>
-        <VideoPlayer
-          video={{
-            uri: 'https://www.youtube.com/watch?v=zJwHKgj5BwM',
-          }}
-          videoWidth={800}
-          autoplay={false}
-          defaultMuted={true}
-          videoHeight={500}
-          thumbnail={require('../../assets/recording.png')}
-        />
+
         <Text
           style={{padding: 8, color: 'black', fontSize: 15}}
           numberOfLines={15}>
-          {item?.completion}
+          {item?.description}
         </Text>
       </View>
     );
@@ -63,9 +53,19 @@ const CommonPractices = () => {
   return (
     <View>
       <FlatList
-        data={practiceData}
+        data={practiceData?.central}
         renderItem={renderData}
-        keyExtractor={item => item.prompt}
+        keyExtractor={item => item.id}
+      />
+      <FlatList
+        data={practiceData?.Maharashtra}
+        renderItem={renderData}
+        keyExtractor={item => item.id}
+      />
+      <FlatList
+        data={practiceData?.MP}
+        renderItem={renderData}
+        keyExtractor={item => item.id}
       />
     </View>
   );
