@@ -10,7 +10,7 @@ export const store = configureStore({
     user: userSlice,
     posts: postsSlice,
     comments: commentsSlice,
-    commonData: commonSlice
+    commonData: commonSlice,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -18,6 +18,7 @@ export const store = configureStore({
     }).concat(thunkMiddleware),
 });
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
+
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch;

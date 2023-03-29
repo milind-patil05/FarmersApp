@@ -15,8 +15,10 @@ import {useNavigation, CommonActions} from '@react-navigation/native';
 import OtpInputs from 'react-native-otp-inputs';
 import {useRoute} from '@react-navigation/native';
 import DB_COLLECTION from '../../utils/constants';
+import {useTranslation} from 'react-i18next';
 
 const Verify = () => {
+  const {t} = useTranslation();
   const route = useRoute();
 
   const navigation = useNavigation();
@@ -106,7 +108,7 @@ const Verify = () => {
                 marginTop: 24,
                 color: '#000000',
               }}>
-              Verification Code
+              {t('VERIFICATIONCODE')}
             </Text>
             <Text
               style={{
@@ -115,7 +117,7 @@ const Verify = () => {
                 fontWeight: '400',
                 marginTop: 20,
               }}>
-              To login, please enter OTP sent via SMS
+              {t('TOLOGIN')}
             </Text>
             <View style={{height: 100}}>
               <OtpInputs
@@ -164,7 +166,7 @@ const Verify = () => {
                     alignSelf: 'center',
                     color: '#FFFFFF',
                   }}>
-                  Verify OTP
+                  {t('VERIFYOTP')}
                 </Text>
               </TouchableOpacity>
             </View>

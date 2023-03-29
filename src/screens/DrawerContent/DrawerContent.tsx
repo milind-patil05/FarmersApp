@@ -77,6 +77,25 @@ function DrawerContent() {
           Profile
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ flexDirection: 'row', marginTop: 16 }}
+        onPress={() => {
+          navigation.dispatch(DrawerActions.closeDrawer());
+          navigation.navigate('Change Language');
+        }}>
+        <FontAwesomeIcon name="user-circle" size={24} color={'#000000'} />
+        <Text
+          style={{
+            fontSize: 16,
+            alignSelf: 'center',
+            marginLeft: 12,
+            color: '#000000',
+          }}>
+          Change Language
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={{ flexDirection: 'row', marginTop: 16 }}
         onPress={() => {

@@ -19,8 +19,10 @@ import {addUser, fetchUser} from '../../redux/slices/userSlice';
 import {SnackBar} from '../../toast/SnackBar';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../redux/store';
+import {useTranslation} from 'react-i18next';
 
 const Login = () => {
+  const {t} = useTranslation();
   const navigation = useNavigation();
   const [confirm, setConfirm] = useState(null);
   // verification code (OTP - One-Time-Passcode)
@@ -216,7 +218,7 @@ const Login = () => {
                     alignSelf: 'center',
                     color: '#FFFFFF',
                   }}>
-                  Request OTP
+                  {t('REQUESTOTP')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -363,7 +365,7 @@ const Login = () => {
                       alignSelf: 'center',
                       color: '#FFFFFF',
                     }}>
-                    Verify OTP
+                    {t('VerifyOTP')}
                   </Text>
                 </TouchableOpacity>
               </View>
