@@ -3,9 +3,10 @@
     "LOGIN": "Login",
     "REQUESTOTP": "Request OTP",
     "CHANGEAPPLANGUAGE": "Change App Language",
-    "CROPDETAILS": "Crop Details",
+    "CROPDETAILS": "Farmers Helpdesk",
     "VERIFICATIONCODE": "Verification Code",
     "TOLOGIN": "To login, please enter OTP sent via SMS",
-    "VERIFYOTP": "Verify OTP"
+    "VERIFYOTP": "Verify OTP",
+    "COMMONPRACTICES":"Common Practices"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, Linking } from 'react-native';
 import {
   CommonActions,
   useNavigation,
@@ -38,8 +38,8 @@ function DrawerContent() {
         paddingLeft: 45,
       }}>
       <IoniconsIcon
-        name="close-outline"
-        size={30}
+        name="md-close"
+        size={36}
         onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}
         style={{ alignSelf: 'flex-end', paddingRight: 45 }}
       />
@@ -49,10 +49,10 @@ function DrawerContent() {
           navigation.dispatch(DrawerActions.closeDrawer());
           navigation.navigate('Settings');
         }}>
-        <IoniconsIcon name="settings-sharp" size={24} color={'#000000'} />
+        <IoniconsIcon name="settings-sharp" size={26} color={'#000000'} />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 18,
             alignSelf: 'center',
             marginLeft: 12,
             color: '#000000',
@@ -61,15 +61,15 @@ function DrawerContent() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={{ flexDirection: 'row', marginTop: 16 }}
+        style={{ flexDirection: 'row', marginTop: 24 }}
         onPress={() => {
           navigation.dispatch(DrawerActions.closeDrawer());
           navigation.navigate('Profile');
         }}>
-        <FontAwesomeIcon name="user-circle" size={24} color={'#000000'} />
+        <FontAwesomeIcon name="user" size={26} color={'#000000'} />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 18,
             alignSelf: 'center',
             marginLeft: 12,
             color: '#000000',
@@ -79,15 +79,15 @@ function DrawerContent() {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={{ flexDirection: 'row', marginTop: 16 }}
+        style={{ flexDirection: 'row', marginTop: 24 }}
         onPress={() => {
           navigation.dispatch(DrawerActions.closeDrawer());
           navigation.navigate('Change Language');
         }}>
-        <FontAwesomeIcon name="user-circle" size={24} color={'#000000'} />
+        <FontAwesomeIcon name="language" size={26} color={'#000000'} />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 18,
             alignSelf: 'center',
             marginLeft: 12,
             color: '#000000',
@@ -95,16 +95,32 @@ function DrawerContent() {
           Change Language
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', marginTop: 24 }}
+        onPress={() => {
+          Linking.openURL('https://t.me/Dialog101_bot');
+        }}>
+        <FontAwesome5Icon name="telegram" size={26} color={'#000000'} />
+        <Text
+          style={{
+            fontSize: 18,
+            alignSelf: 'center',
+            marginLeft: 12,
+            color: '#000000',
+          }}>
+          Telegram Boat
+        </Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
-        style={{ flexDirection: 'row', marginTop: 16 }}
+        style={{ flexDirection: 'row', marginTop: 24 }}
         onPress={() => {
           userSignOut();
         }}>
-        <FontAwesome5Icon name="sign-out-alt" size={24} color={'#000000'} />
+        <FontAwesome5Icon name="sign-out-alt" size={26} color={'#000000'} />
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 18,
             alignSelf: 'center',
             marginLeft: 12,
             color: '#000000',

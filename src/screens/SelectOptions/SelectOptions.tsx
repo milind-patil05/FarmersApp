@@ -130,7 +130,7 @@ function SelectOptions() {
               color: '#552222',
               fontWeight: 400,
             }}>
-            Take a picture of the disease and get a solution
+             Ask other agriculture related questions
           </Text>
         </View>
         <View

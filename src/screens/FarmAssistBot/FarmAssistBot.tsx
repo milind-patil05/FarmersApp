@@ -116,7 +116,7 @@ function FarmAssistBot(): JSX.Element {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer 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',
+          'Bearer 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',
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo-0301',

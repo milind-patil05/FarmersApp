@@ -141,7 +141,7 @@ function Community() {
           marginTop: 20,
           flexWrap: 'wrap',
           width: Dimensions.get('screen').width - 36,
-          height: 100
+          height: 250
         }} source={{uri: item?.image?.assets[0]?.uri}} /> )}
 
         <Text

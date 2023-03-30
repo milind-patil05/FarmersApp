@@ -3,9 +3,10 @@
     "LOGIN": "लॉगीन",
     "REQUESTOTP": "ओटीपी का अनुरोध करें",
     "CHANGEAPPLANGUAGE":"ऐप भाषा बदलें",
-    "CROPDETAILS": "फसल विवरण",
+    "CROPDETAILS": "किसान सहायता कक्ष",
     "VERIFICATIONCODE": "सत्यापन कोड",
     "TOLOGIN": "लॉगिन करने के लिए, कृपया एसएमएस द्वारा भेजे गए ओटीपी को दर्ज करें",
-    "VERIFYOTP": "ओटीपी सत्यापित करें"
+    "VERIFYOTP": "ओटीपी सत्यापित करें",
+    "COMMONPRACTICES":"Common Practices"
   }
 }

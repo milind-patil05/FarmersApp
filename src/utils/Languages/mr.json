@@ -3,9 +3,10 @@
     "LOGIN": "लॉगीन",
     "REQUESTOTP": "ओटीपी मागवा",
     "CHANGEAPPLANGUAGE":"ऍपची भाषा बदला",
-    "CROPDETAILS": "पीक तपशील",
+    "CROPDETAILS": "शेतकरी मदत कक्ष",
     "VERIFICATIONCODE": "सत्यापन कोड",
     "TOLOGIN": "लॉग इन करण्यासाठी, कृपया एसएमएसद्वारे पाठवलेला ओटीपी प्रविष्ट करा",
-    "VERIFYOTP": "ओटीपी सत्यापित करा"
+    "VERIFYOTP": "ओटीपी सत्यापित करा",
+    "COMMONPRACTICES":"Common Practices"
   }
 }

@@ -250,7 +250,7 @@ const Home = () => {
                       }}
                     />
                   </View>
-                  <Text style={{marginTop: 8, width: 80}}>
+                  <Text style={{marginTop: 8, fontWeight: '500', fontSize: 16,alignSelf:'center', textAlign:'center' , color:'#232323', width: 80}}>
                     {item.crop_name}
                   </Text>
                 </View>
@@ -319,7 +319,11 @@ const Home = () => {
                       <Text
                         style={{
                           marginTop: 8,
-
+                          fontSize: 16,
+                          alignSelf: 'center',
+                          textAlign: 'center',
+                          color: '#232323',
+                          fontWeight: '600',
                           width: (Dimensions.get('window').width - 60) * 0.5,
                         }}>
                         {item.title}
